@@ -1,0 +1,52 @@
+import {test,expect} from '@playwright/test';
+import {randomUUID} from 'node:crypto';
+
+test('production layout, account initialization, non-cascading revoke and persistence',async({page})=>{
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('/');
+  await expect(page.locator('.knowledge-card')).toHaveCount(20);
+  await expect(page.locator('.react-flow__minimap')).toBeVisible();
+  await page.getByLabel('显示 Weak 弱依赖').check();
+  await expect(page.locator('.react-flow__edge')).toHaveCount(31);
+  await page.getByLabel('定位知识').selectOption({label:'二次函数的图像与性质'});
+  await page.getByRole('button',{name:'Fly-to',exact:true}).click();
+  await page.getByRole('button',{name:'查看详情',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'二次函数的图像与性质',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'关闭详情'}).click();
+  await page.getByRole('button',{name:'登录 / 注册'}).click();
+  await page.getByRole('button',{name:'还没有账户？注册'}).click();
+  const username='e2e_'+randomUUID().slice(0,8),password=randomUUID();
+  await page.getByRole('textbox',{name:'用户名',exact:true}).fill(username);
+  await page.getByLabel('密码',{exact:true}).fill(password);
+  await page.getByRole('button',{name:'创建并登录'}).click();
+  await expect(page.getByRole('button',{name:'完成初始化'})).toBeVisible();
+  await page.getByRole('button',{name:'查看详情',exact:true}).click();
+  await page.getByRole('button',{name:'标记已掌握',exact:true}).click();
+  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+  await page.getByRole('button',{name:'关闭详情'}).click();
+  await page.getByRole('button',{name:'完成初始化'}).click();
+  await expect(page.getByRole('button',{name:'完成初始化'})).toHaveCount(0);
+  await page.getByLabel('定位知识').selectOption({label:'函数的图像'});
+  await page.getByRole('button',{name:'查看详情',exact:true}).click();
+  await page.getByRole('button',{name:'标记为未掌握（保留后继进度）'}).click();
+  await expect(page.getByTestId('node-HS-FUNC-GRAPH-001')).toHaveAttribute('data-status','available');
+  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+  await page.getByRole('button',{name:'关闭详情'}).click();
+  await page.getByRole('button',{name:'退出登录'}).click();
+  await page.getByRole('button',{name:'登录 / 注册'}).click();
+  await page.getByRole('textbox',{name:'用户名',exact:true}).fill(username);
+  await page.getByLabel('密码',{exact:true}).fill(password);
+  await page.getByRole('button',{name:'登录',exact:true}).click();
+  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+  await page.reload();
+  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+  await page.screenshot({path:'test-results/desktop.png'});
+  expect(errors).toEqual([]);
+});
+
+test('mobile layout renders without overflow',async({page})=>{
+  await page.setViewportSize({width:390,height:844});await page.goto('/');
+  await expect(page.locator('.knowledge-card')).toHaveCount(20);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+  await page.screenshot({path:'test-results/mobile.png'});
+});

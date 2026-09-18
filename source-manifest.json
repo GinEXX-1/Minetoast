@@ -1,0 +1,18 @@
+[
+  {
+    "file": "docs/inputs/MASTER PROMPT.md",
+    "sha256": "093f5f3af56fbbfe6de5996972815233d23667c116766612e4080c5efe8bc3dd"
+  },
+  {
+    "file": "docs/inputs/产品 PRD V1.0.md",
+    "sha256": "69e15a4a682681520b08dce1e87a2ac283c4c91956796725d0f41b709910781a"
+  },
+  {
+    "file": "docs/inputs/核心数据 Schema.md",
+    "sha256": "b363685934302cb8b25bbf22cc02cd214e2a2d45e326c4741069536be2e3efff"
+  },
+  {
+    "file": "docs/inputs/知识图谱质量控制规则.md",
+    "sha256": "17ea77d5127eab7d89850c9a84f23d16b3c01bbae85ab0972bb59a129af76814"
+  }
+]
