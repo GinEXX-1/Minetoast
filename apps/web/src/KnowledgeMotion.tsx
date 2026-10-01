@@ -3,6 +3,7 @@ import {ControlButton,Controls,useReactFlow} from '@xyflow/react';
 import './knowledge-motion.css';
 
 export const motionTime=(duration:number)=>matchMedia('(prefers-reduced-motion: reduce)').matches?0:duration;
+const smoothEase=(progress:number)=>progress<.5?4*progress*progress*progress:1-(-2*progress+2)**3/2;
 
 const sparks=Array.from({length:24},(_,index)=>{
  const angle=index*Math.PI*2/24;
@@ -21,18 +22,18 @@ export function useAnimatedDrawer(ref:RefObject<HTMLDialogElement|null>,onClose:
  useEffect(()=>{
   const element=ref.current;if(!element)return;
   if(!element.open)element.showModal();
-  animation.current=element.animate([{transform:'translateX(100%)'},{transform:'translateX(0)'}],{duration:motionTime(260),easing:'linear'});
+  animation.current=element.animate([{transform:'translateX(100%)',opacity:0},{transform:'translateX(0)',opacity:1}],{duration:motionTime(280),easing:'linear'});
   return()=>animation.current?.cancel();
  },[ref]);
  const close=useCallback(()=>{
   const element=ref.current;if(!element||closing.current)return;
   closing.current=true;
-  const transform=getComputedStyle(element).transform;
+  const style=getComputedStyle(element),transform=style.transform,opacity=style.opacity;
   animation.current?.cancel();
   const duration=motionTime(220);
   if(!duration){onCloseRef.current();return;}
   element.dataset.closing='true';
-  animation.current=element.animate([{transform},{transform:'translateX(100%)'}],{duration,easing:'linear',fill:'forwards'});
+  animation.current=element.animate([{transform,opacity},{transform:'translateX(100%)',opacity:0}],{duration,easing:'linear',fill:'forwards'});
   animation.current.onfinish=()=>onCloseRef.current();
  },[ref]);
  useEffect(()=>{
@@ -121,9 +122,9 @@ export function useSmoothGraphWheel(ref:RefObject<HTMLElement|null>){
 export function MotionControls({position='top-left'}:{position?:'top-left'|'bottom-left'}){
  const flow=useReactFlow();
  return <Controls position={position} showZoom={false} showFitView={false} showInteractive={false}>
-  <ControlButton aria-label="Zoom In" onClick={()=>void flow.zoomIn({duration:motionTime(240)})}><svg viewBox="0 0 16 16"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></ControlButton>
-  <ControlButton aria-label="Zoom Out" onClick={()=>void flow.zoomOut({duration:motionTime(240)})}><svg viewBox="0 0 16 16"><path d="M2 7h12v2H2z"/></svg></ControlButton>
-  <ControlButton aria-label="Fit View" onClick={()=>void flow.fitView({padding:.18,duration:motionTime(300)})}><svg viewBox="0 0 16 16"><path d="M2 6V2h4v2H4v2zm8-4h4v4h-2V4h-2zM2 10h2v2h2v2H2zm10 0h2v4h-4v-2h2z"/></svg></ControlButton>
+  <ControlButton aria-label="Zoom In" onClick={()=>void flow.zoomIn({duration:motionTime(420),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></ControlButton>
+  <ControlButton aria-label="Zoom Out" onClick={()=>void flow.zoomOut({duration:motionTime(420),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M2 7h12v2H2z"/></svg></ControlButton>
+  <ControlButton aria-label="Fit View" onClick={()=>void flow.fitView({padding:.18,duration:motionTime(480),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M2 6V2h4v2H4v2zm8-4h4v4h-2V4h-2zM2 10h2v2h2v2H2zm10 0h2v4h-4v-2h2z"/></svg></ControlButton>
  </Controls>;
 }
 

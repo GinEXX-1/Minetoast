@@ -38,7 +38,7 @@ type Transient={token:number;targetId:string|null;ancestorIds:readonly string[];
 const noTransient:Transient={token:0,targetId:null,ancestorIds:[],wakeIds:[]};
 
 /** Screen-space overlay: it stays above all graph nodes and never inherits their scale/filter. */
-function WorldHoverCard({nodeId,positions,statuses,initializing,size}:{nodeId:string|null;positions:Record<string,{x:number;y:number}>;statuses:Record<string,NodeStatus>;initializing:boolean;size:{width:number;height:number}}){
+function WorldHoverCard({nodeId,positions,statuses,initializing,size,onEnter,onLeave}:{nodeId:string|null;positions:Record<string,{x:number;y:number}>;statuses:Record<string,NodeStatus>;initializing:boolean;size:{width:number;height:number};onEnter:(id:string)=>void;onLeave:()=>void}){
  const viewport=useViewport();
  if(!nodeId)return null;
  const node=worldNodes.get(nodeId),detail=worldDetailById.get(nodeId),position=positions[nodeId];
@@ -48,7 +48,7 @@ function WorldHoverCard({nodeId,positions,statuses,initializing,size}:{nodeId:st
  const preferredLeft=nodeLeft+100*viewport.zoom+16;
  const left=Math.max(12,Math.min(preferredLeft+width>size.width-12?nodeLeft-width-16:preferredLeft,size.width-width-12));
  const top=Math.max(54,Math.min(nodeTop,size.height-170));
- return <div className="world-node-tooltip" role="status" aria-label={`${node.canonicalName}节点信息`} style={{left,top,width}}>
+ return <div className="world-node-tooltip" role="status" aria-label={`${node.canonicalName}节点信息`} style={{left,top,width}} onPointerEnter={()=>onEnter(nodeId)} onPointerLeave={onLeave}>
   <strong>{node.canonicalName}</strong><small>{node.achievementName}</small><em>{initializing?'点击加入进度':statusLabels[statuses[nodeId]]}</em><p>{detail.overview}</p>
  </div>;
 }
@@ -96,6 +96,9 @@ export default function FunctionWorld(){
  const [activeModule,setActiveModule]=useState<string|null>(null),[search,setSearch]=useState('');
  const activeModuleRef=useRef(activeModule);activeModuleRef.current=activeModule;
  const [betweenFrom,setBetweenFrom]=useState(''),[betweenTo,setBetweenTo]=useState(''),[pathQuery,setPathQuery]=useState<PathQuery|null>(null);
+ const hoverTimer=useRef<number|undefined>(undefined);
+ const enterNode=useCallback((id:string)=>{if(hoverTimer.current!==undefined)window.clearTimeout(hoverTimer.current);setHoveredId(id);},[]);
+ const leaveNode=useCallback(()=>{if(hoverTimer.current!==undefined)window.clearTimeout(hoverTimer.current);hoverTimer.current=window.setTimeout(()=>setHoveredId(null),180);},[]);
  const [transient,setTransient]=useState<Transient>(noTransient),[toasts,setToasts]=useState<Toast[]>([]);
  const unlocked=useMemo(()=>new Set(progress.unlockedNodeIds),[progress.unlockedNodeIds]);
  const statuses=useMemo(()=>worldStatuses(progress),[progress]);
@@ -142,11 +145,11 @@ export default function FunctionWorld(){
   <section className="world-pathbar" aria-label="知识路径"><span>{focusedName?`当前：${focusedName}`:'点击或搜索节点以定位'}</span><button disabled={!focusedId} onClick={()=>focusedId&&showPath({mode:'to',nodeId:focusedId})}>我怎样学到这里？</button><button disabled={!focusedId} onClick={()=>focusedId&&showPath({mode:'from',nodeId:focusedId})}>学会它以后能去哪？</button><label>A 到 B <select aria-label="路径起点" value={betweenFrom} onChange={e=>setBetweenFrom(e.target.value)}><option value="">起点</option>{worldGraph.nodes.map(n=><option key={n.id} value={n.id}>{worldNodes.get(n.id)?.canonicalName}</option>)}</select><select aria-label="路径终点" value={betweenTo} onChange={e=>setBetweenTo(e.target.value)}><option value="">终点</option>{worldGraph.nodes.map(n=><option key={n.id} value={n.id}>{worldNodes.get(n.id)?.canonicalName}</option>)}</select></label><button disabled={!betweenFrom||!betweenTo} onClick={()=>showPath({mode:'between',source:betweenFrom,target:betweenTo})}>显示路径</button>{pathQuery&&<><span className="world-path-summary" role="status">{pathResult?.reachable?`${pathResult.nodeIds.length} 节点 · ${pathResult.edgeIds.length} 关系`:'未找到可达路径'}</span><button onClick={()=>setPathQuery(null)}>退出路径</button></>}<button disabled={!focusedId} onClick={()=>focusedId&&setSelectedId(focusedId)}>查看详情</button></section>
   <div className="world-main">
    <main ref={graphRef} className="world-graph" aria-label="函数知识图谱">
-    <ReactFlow zoomOnScroll={false} nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} edgesFocusable={false} minZoom={.04} maxZoom={1.8} onNodeClick={onNodeClick} onNodeMouseEnter={(_,node)=>setHoveredId(node.id)} onNodeMouseLeave={()=>setHoveredId(null)} fitViewOptions={{padding:.18}} proOptions={{hideAttribution:false}}>
+    <ReactFlow zoomOnScroll={false} nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} edgesFocusable={false} minZoom={.04} maxZoom={1.8} onNodeClick={onNodeClick} onNodeMouseEnter={(_,node)=>enterNode(node.id)} onNodeMouseLeave={leaveNode} fitViewOptions={{padding:.18}} proOptions={{hideAttribution:false}}>
      <Background color="#505461" gap={32} size={1}/>
      <MotionControls/>
      <MiniMap position="top-right" pannable zoomable nodeColor={n=>n.data.status==='unlocked'?'#40aa75':n.data.status==='available'?'#d9b563':'#68717e'} maskColor="rgba(32,35,44,.65)"/>
-     <WorldHoverCard nodeId={hoveredId??focusedId} positions={positions} statuses={statuses} initializing={!progress.initialized} size={graphSize}/>
+     <WorldHoverCard nodeId={hoveredId??focusedId} positions={positions} statuses={statuses} initializing={!progress.initialized} size={graphSize} onEnter={enterNode} onLeave={leaveNode}/>
     </ReactFlow>
     <div className="world-legend"><span className="legend-mark legend-locked"/>未解锁<span className="legend-mark legend-available"/>可解锁<span className="legend-mark legend-unlocked"/>已掌握<span className="legend-mark legend-key"/>关键成就</div>
     {layoutWarning&&<p className="world-layout-note">{layoutWarning}</p>}
