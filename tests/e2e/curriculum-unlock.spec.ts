@@ -12,10 +12,10 @@ test('advanced calculus node initializes 20+ real ancestors with bounded feedbac
  expect([200,206]).toContain((await clickPlayback).status());
  expect([200,206]).toContain((await achievementPlayback).status());
  await expect(page.getByText('已自动点亮 24 个知识节点')).toBeVisible();
- await expect(page.locator('.curriculum-world-toasts>div')).toHaveCount(1);
+ await expect(page.locator('dialog .world-toasts>div')).toHaveCount(1);
  await expect(page.locator('.curriculum-node.pulse')).toHaveCount(9);
- await expect(page.locator('.curriculum-particles')).toHaveCount(1);
- await expect(page.locator('.curriculum-particles i')).toHaveCount(6);
+ await expect(page.locator('.curriculum-node .kw-pixel-burst')).toHaveCount(1);
+ await expect(page.locator('.curriculum-node .kw-spark')).toHaveCount(24);
  await expect(page.locator('#curriculum-progress-panel').getByText('24 / 41')).toBeVisible();
  const unlocked=await page.evaluate(()=>JSON.parse(localStorage.getItem('kw:curriculum:calculus:v1')??'null')?.unlocked);
  expect(unlocked).toHaveLength(24);

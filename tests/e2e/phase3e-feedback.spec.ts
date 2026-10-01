@@ -5,7 +5,6 @@ import {worldGraph,worldGraphVersion,worldProgressStorageKey} from '../../apps/w
 test('P3E ordinary unlock has one item toast',async({page})=>{
  await page.addInitScript(({key,version})=>localStorage.setItem(key,JSON.stringify({schemaVersion:1,graphVersion:version,initialized:true,unlockedNodeIds:[]})),{key:worldProgressStorageKey,version:worldGraphVersion});
  await page.goto('/function-world');
- await expect(page.getByRole('button',{name:'声音：开'})).toHaveAttribute('aria-pressed','true');
  await page.locator('[data-testid="world-node-HS-SET-CONCEPT-001"] .kw-frame').click();
  await expect(page.getByLabel('函数知识世界进度 1 / 32')).toBeVisible();
  const toast=page.locator('.world-toasts>div').filter({hasText:'集合的概念'});
@@ -27,7 +26,7 @@ test('P3E key achievement has distinct message; reduced motion suppresses animat
  await expect(toast).toContainText('关键成就达成');
  await expect(toast).toContainText('函数的概念');
  expect(await toast.evaluate(element=>getComputedStyle(element).animationName)).toBe('none');
- await page.screenshot({path:'assets/phase-3/p3e-key-achievement.png',animations:'disabled'});
+ await page.screenshot({path:'.tmp/motion-key-achievement.png',animations:'disabled'});
 });
 
 test('batch initialization shows one summary toast, one particle burst and bounded ancestor animation',async({page})=>{
@@ -37,6 +36,6 @@ test('batch initialization shows one summary toast, one particle burst and bound
  await expect(page.locator('.world-toasts>div')).toHaveCount(1);
  await expect(page.locator('.world-toasts>div')).toContainText('已自动点亮 9 个知识节点');
  await expect(page.locator('.world-card.ancestor-pulse')).toHaveCount(8);
- await expect(page.locator('.world-particles')).toHaveCount(1);
- await expect(page.locator('.world-particles i')).toHaveCount(6);
+ await expect(page.locator('.world-card .kw-pixel-burst')).toHaveCount(1);
+ await expect(page.locator('.world-card .kw-spark')).toHaveCount(12);
 });

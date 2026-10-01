@@ -1,0 +1,35 @@
+/* Motion targets only the project surfaces; fonts, layout and native controls stay intact. */
+:root{--kw-panel-motion:260ms;--kw-hover-motion:140ms}
+::view-transition-old(root){animation:kw-page-out 160ms linear both}
+::view-transition-new(root){animation:kw-page-in 180ms linear both}
+#root.kw-page-exit{animation:kw-page-out 160ms linear forwards}
+.knowledge-portal .portal-card{transition:transform var(--kw-hover-motion) linear,border-color var(--kw-hover-motion) linear,box-shadow var(--kw-hover-motion) linear}
+.function-world .world-search-results,.function-world .world-node-tooltip{animation:kw-page-in 140ms linear}
+.function-world .world-drawer{scroll-behavior:auto;overscroll-behavior:contain}
+.function-world .world-drawer[data-closing=true]{pointer-events:none}
+.world-drawer::backdrop{animation:kw-page-in var(--kw-panel-motion) linear}
+.function-world .world-card.target-pulse .kw-frame{animation:p3-frame-unlock 650ms linear}
+.function-world .world-card.ancestor-pulse .kw-frame{animation:p3-ancestor-flash 480ms linear}
+.function-world .world-card.wake .kw-frame{animation:p3-available-breathe 700ms linear}
+.world-toasts>div.kw-motion-toast,.curriculum-world-toasts>div.kw-motion-toast{position:relative;display:flex;align-items:center;gap:10px;min-width:220px;max-width:min(360px,calc(100vw - 32px));padding:12px 36px 12px 14px;pointer-events:auto;touch-action:pan-y;user-select:none;cursor:grab;animation:none;background:#303e35;color:#e7efea;border:2px solid #76ce8b;border-radius:0;box-shadow:4px 4px 0 #151923}
+.world-toasts>div.kw-motion-toast.key,.curriculum-world-toasts>div.kw-motion-toast.key{border-color:#e4c676;background:#46412e;color:#fff0bb}
+.kw-motion-toast:active{cursor:grabbing}
+.function-world .kw-motion-toast .kw-toast-dismiss{position:absolute;right:6px;top:6px;width:22px;height:22px;padding:0;font-family:system-ui,sans-serif;font-size:16px;line-height:18px;box-shadow:none;border:1px solid #789080;background:transparent;color:inherit}
+.function-world .world-toasts--drawer{z-index:10;overflow:visible}
+.world-toasts--drawer>div.kw-motion-toast{max-width:100%;width:100%}
+.kw-pixel-burst{position:absolute!important;inset:0;display:block!important;pointer-events:none;overflow:visible;z-index:6;contain:layout style}
+.kw-spark{position:absolute;left:50%;top:50%;width:var(--spark-size);height:var(--spark-size);background:#86d4ab;opacity:0;animation:kw-spark-flight 720ms var(--spark-delay) linear both}
+.kw-spark:nth-child(3n){background:#e9d080}.kw-spark:nth-child(4n){background:#dcebdd}
+.is-important .kw-spark{background:#e9d080;box-shadow:0 0 4px #e4c67680;animation-duration:900ms}
+.is-important .kw-spark:nth-child(3n){background:#96dfbd}
+.kw-burst-ring{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px;border:2px solid #8adbb8;opacity:0;animation:kw-burst-ring 600ms linear both}
+.is-important .kw-burst-ring{border-color:#e4c676}
+@keyframes kw-spark-flight{0%{transform:translate(0,0);opacity:0}12%{opacity:1}70%{opacity:1}100%{transform:translate(var(--spark-x),var(--spark-y));opacity:0}}
+@keyframes kw-burst-ring{0%{transform:scale(.5);opacity:.7}100%{transform:scale(2.8);opacity:0}}
+@keyframes kw-page-in{from{opacity:0}to{opacity:1}}
+@keyframes kw-page-out{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root),#root.kw-page-exit,.world-drawer::backdrop,.function-world .world-search-results,.function-world .world-node-tooltip{animation:none}.knowledge-portal .portal-card{transition:none}.kw-pixel-burst{display:none!important}}
+.function-world button,.world-wiki-nav a,.portal-filters button,.portal-rail a,.portal-account{transition:background-color 140ms linear,color 140ms linear,border-color 140ms linear,box-shadow 140ms linear}
+.auth-dialog[open]{animation:kw-page-in 220ms linear}.detail-drawer[open]{animation:kw-legacy-drawer-in 260ms linear}
+@keyframes kw-legacy-drawer-in{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.auth-dialog[open],.detail-drawer[open]{animation:none}.function-world button,.world-wiki-nav a,.portal-filters button,.portal-rail a,.portal-account{transition:none}}
