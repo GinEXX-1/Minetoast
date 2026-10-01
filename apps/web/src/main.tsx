@@ -1,9 +1,8 @@
-import {PageMotion,SmoothControls} from './WorldMotion';
 import React,{useState,useEffect,useMemo,useRef,useCallback,memo,lazy,Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
 import {QueryClient,QueryClientProvider,useQuery,useQueryClient} from '@tanstack/react-query';
 import {create} from 'zustand';
-import {ReactFlow,ReactFlowProvider,Background,MiniMap,Handle,Position,BaseEdge,EdgeLabelRenderer,getBezierPath,useReactFlow,useViewport,MarkerType,type NodeProps,type EdgeProps} from '@xyflow/react';
+import {ReactFlow,ReactFlowProvider,Background,Controls,MiniMap,Handle,Position,BaseEdge,EdgeLabelRenderer,getBezierPath,useReactFlow,useViewport,MarkerType,type NodeProps,type EdgeProps} from '@xyflow/react';
 import type {KnowledgeNode,KnowledgeEdge,NodeStatus,PathQuery} from '../../../packages/domain/src/index';
 import {strongParents,indexGraph,projectStatuses,searchNodes,findPath,domainPortals} from '../../../packages/graph-core/src/index';
 import {BackupPanel,RegionMap,AdminPanel,useFeedback} from './Extensions';
@@ -33,7 +32,7 @@ const nodeTypes={knowledge:KnowledgeCard},edgeTypes={dependency:DependencyEdge};
 function CanvasLegend(){const {zoom}=useViewport();return <div className="canvas-legend"><span>◇ Available</span><span>✓ Unlocked</span><span>🔒 Locked</span><span>{Math.round(zoom*100)}%</span></div>;}
 const GraphCanvas=memo(function GraphCanvas({nodes,edges,onNodeClick,select,onHover}:{nodes:any[];edges:any[];onNodeClick:(_:unknown,node:{id:string})=>void;select:(id:string|null)=>void;onHover:(id:string|null)=>void}){
  return <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} edgesFocusable={false} minZoom={0.03} maxZoom={1.8} onNodeClick={onNodeClick} onNodeContextMenu={(e,n)=>{e.preventDefault();if(n.id.startsWith('view:portal:'))onNodeClick(e,n);else select(n.id);}} onNodeMouseEnter={(_,n)=>onHover((n.data.node as KnowledgeNode).id)} onNodeMouseLeave={()=>onHover(null)} fitViewOptions={{padding:0.12}} proOptions={{hideAttribution:false}}>
-  <Background color="#34453f" gap={28} size={1}/><SmoothControls position="bottom-left"/><MiniMap pannable zoomable nodeColor={n=>n.data.status==='unlocked'?'#55b78a':n.data.status==='available'?'#d8ae5b':'#52616a'} maskColor="rgba(8,17,14,.55)"/><CanvasLegend/>
+  <Background color="#34453f" gap={28} size={1}/><Controls showInteractive={false}/><MiniMap pannable zoomable nodeColor={n=>n.data.status==='unlocked'?'#55b78a':n.data.status==='available'?'#d8ae5b':'#52616a'} maskColor="rgba(8,17,14,.55)"/><CanvasLegend/>
  </ReactFlow>;
 });
 const LazyFormula=lazy(()=>import('./Formula'));
@@ -139,4 +138,4 @@ const FunctionContentPreview=lazy(()=>import('./FunctionContentPreview'));
 const FunctionWorld=lazy(()=>import('./FunctionWorld'));
 const P3BFramePreview=lazy(()=>import('./P3BFramePreview'));
 const P3CIconPreview=lazy(()=>import('./P3CIconPreview'));
-createRoot(document.getElementById('root')!).render(<React.StrictMode><PageMotion/>{p3cIconRoute?<Suspense fallback={<div className="loading">加载 Phase 3C 图标预览…</div>}><P3CIconPreview/></Suspense>:p3bFrameRoute?<ReactFlowProvider><Suspense fallback={<div className="loading">加载 Phase 3B 节点框预览…</div>}><P3BFramePreview/></Suspense></ReactFlowProvider>:functionWorldRoute?<ReactFlowProvider><Suspense fallback={<div className="loading">加载函数知识世界…</div>}><FunctionWorld/></Suspense></ReactFlowProvider>:systemMatch?<KnowledgeSystemPage systemId={systemMatch[1]}/>:phase2cPreview?<Suspense fallback={<div className="loading">加载 Phase 2C 内容候选…</div>}><FunctionContentPreview/></Suspense>:legacyRoute?<QueryClientProvider client={client}><ReactFlowProvider><App/></ReactFlowProvider></QueryClientProvider>:<KnowledgePortal/>}</React.StrictMode>);
+createRoot(document.getElementById('root')!).render(<React.StrictMode>{p3cIconRoute?<Suspense fallback={<div className="loading">加载 Phase 3C 图标预览…</div>}><P3CIconPreview/></Suspense>:p3bFrameRoute?<ReactFlowProvider><Suspense fallback={<div className="loading">加载 Phase 3B 节点框预览…</div>}><P3BFramePreview/></Suspense></ReactFlowProvider>:functionWorldRoute?<ReactFlowProvider><Suspense fallback={<div className="loading">加载函数知识世界…</div>}><FunctionWorld/></Suspense></ReactFlowProvider>:systemMatch?<KnowledgeSystemPage systemId={systemMatch[1]}/>:phase2cPreview?<Suspense fallback={<div className="loading">加载 Phase 2C 内容候选…</div>}><FunctionContentPreview/></Suspense>:legacyRoute?<QueryClientProvider client={client}><ReactFlowProvider><App/></ReactFlowProvider></QueryClientProvider>:<KnowledgePortal/>}</React.StrictMode>);

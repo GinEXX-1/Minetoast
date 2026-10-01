@@ -1,5 +1,5 @@
 import React,{lazy,memo,Suspense,useCallback,useEffect,useMemo,useRef,useState} from 'react';
-import {ReactFlow,Background,BaseEdge,Handle,MarkerType,MiniMap,Position,useReactFlow,useViewport,type Node as FlowNode,type Edge as FlowEdge,type NodeProps,type EdgeProps} from '@xyflow/react';
+import {ReactFlow,Background,BaseEdge,Controls,Handle,MarkerType,MiniMap,Position,useReactFlow,useViewport,type Node as FlowNode,type Edge as FlowEdge,type NodeProps,type EdgeProps} from '@xyflow/react';
 import type {NodeStatus,PathQuery} from '../../../packages/domain/src/index';
 import type {KnowledgeNodeDetail} from '../../../packages/domain/src/knowledge-node-detail';
 import {startLayout} from './workers/layout';
@@ -7,7 +7,6 @@ import {KnowledgeNodeFrame} from './KnowledgeNodeFrame';
 import {MathCraftIcon} from './MathCraftIcon';
 import {KnowledgeWorldBrand} from './KnowledgeWorldBrand';
 import {emptyWorldProgress,fallbackWorldPositions,finishWorldInitialization,initializeWorldTarget,parseWorldProgress,searchWorld,summarizeInitializationFeedback,unlockWorldNode,worldDetailById,worldGraph,worldIndex,worldKeys,worldModuleIds,worldNodes,worldPath,worldProgressCounts,worldProgressStorageKey,worldStatuses,type WorldProgress} from './function-world-model';
-import {SmoothControls,SwipeToast,useDrawerMotion} from './WorldMotion';
 import './function-world.css';
 import './function-world-p3.css';
 import './function-world-wiki.css';
@@ -22,7 +21,7 @@ const WorldCard=memo(function WorldCard({data}:NodeProps){
   <Handle type="target" position={Position.Top}/>
   <KnowledgeNodeFrame level={d.tier} state={d.status} name={d.name} selected={d.focused} icon={<MathCraftIcon nodeId={d.nodeId} decorative/>} onClick={()=>d.onActivate(d.nodeId)}/>
   {d.reviewRequired&&<span className="world-review-dot" title="内容证据仍需复核" aria-label="内容证据仍需复核">!</span>}
-  {d.targetPulse&&<span className="world-particles" aria-hidden="true">{Array.from({length:12},(_,i)=><i key={i}/>)}</span>}
+  {d.targetPulse&&<span className="world-particles" aria-hidden="true">{Array.from({length:6},(_,i)=><i key={i}/>)}</span>}
   <Handle type="source" position={Position.Bottom}/>
  </div>;
 });
@@ -53,17 +52,16 @@ function WorldHoverCard({nodeId,positions,statuses,initializing,size}:{nodeId:st
  </div>;
 }
 
-function WorldToasts({toasts,inDrawer=false,onDismiss}:{toasts:Toast[];inDrawer?:boolean;onDismiss:(id:number)=>void}){
- return <div className={`world-toasts${inDrawer?' world-toasts--drawer':''}`} aria-live="polite">{toasts.map(t=><SwipeToast key={t.id} className={t.key?'key':''} onDismiss={()=>onDismiss(t.id)}>{t.key&&<span className="achievement-burst" aria-hidden="true">{Array.from({length:12},(_,i)=><i key={i}/>)}</span>}{t.nodeId?<><MathCraftIcon nodeId={t.nodeId} decorative width={36} height={36}/><span><strong>{t.key?'关键成就达成':'知识解锁'}</strong><b>{t.text}</b><small>{worldNodes.get(t.nodeId)?.achievementName}</small></span></>:<span>{t.text}</span>}</SwipeToast>)}</div>;
+function WorldToasts({toasts,inDrawer=false}:{toasts:Toast[];inDrawer?:boolean}){
+ return <div className={`world-toasts${inDrawer?' world-toasts--drawer':''}`} aria-live="polite">{toasts.map(t=><div key={t.id} className={t.key?'key':''}>{t.nodeId?<><MathCraftIcon nodeId={t.nodeId} decorative width={36} height={36}/><span><strong>{t.key?'关键成就达成':'知识解锁'}</strong><b>{t.text}</b><small>{worldNodes.get(t.nodeId)?.achievementName}</small></span></>:<span>{t.text}</span>}</div>)}</div>;
 }
 
-function WorldDrawer({detail,status,toasts,onDismiss,onClose,onNavigate,onUnlock,onPath}:{detail:KnowledgeNodeDetail;status:NodeStatus;toasts:Toast[];onDismiss:(id:number)=>void;onClose:()=>void;onNavigate:(id:string)=>void;onUnlock:(id:string)=>void;onPath:(query:PathQuery)=>void}){
+function WorldDrawer({detail,status,toasts,onClose,onNavigate,onUnlock,onPath}:{detail:KnowledgeNodeDetail;status:NodeStatus;toasts:Toast[];onClose:()=>void;onNavigate:(id:string)=>void;onUnlock:(id:string)=>void;onPath:(query:PathQuery)=>void}){
  const dialog=useRef<HTMLDialogElement>(null),id=detail.identity.nodeId;
- const motion=useDrawerMotion(dialog,onClose);
  useEffect(()=>{if(!dialog.current?.open)dialog.current?.showModal();},[]);
- return <dialog ref={dialog} className={`world-drawer${motion.closing?' is-closing':''}`} aria-label={`${detail.identity.knowledgeName}知识详情`} onCancel={event=>{event.preventDefault();motion.close();}} onClose={onClose}>
-  <WorldToasts toasts={toasts} inDrawer onDismiss={onDismiss}/>
-  <div className="world-drawer-head"><span>Knowledge Detail · {detail.metadata.gateStatus}</span><button aria-label="关闭详情" onClick={motion.close}>关闭</button></div>
+ return <dialog ref={dialog} className="world-drawer" aria-label={`${detail.identity.knowledgeName}知识详情`} onCancel={onClose} onClose={onClose}>
+  <WorldToasts toasts={toasts} inDrawer/>
+  <div className="world-drawer-head"><span>Knowledge Detail · {detail.metadata.gateStatus}</span><button aria-label="关闭详情" onClick={onClose}>关闭</button></div>
   <h2>{detail.identity.knowledgeName}</h2><p className="world-achievement">{detail.identity.achievementName} · {detail.identity.englishName}</p>
   <div className="world-detail-meta"><span>{statusLabels[status]}</span><span>重要度 {detail.metadata.importance}/5</span><span>难度 {detail.metadata.difficulty}/5</span><span>证据 {detail.metadata.evidenceStatus}</span></div>
   {detail.metadata.gateStatus==='REVIEW_REQUIRED'&&<p className="world-evidence-warning">教材证据仅覆盖该概念的部分使用情境。完整定义来源尚待复核；当前质量状态未提升。</p>}
@@ -118,7 +116,7 @@ export default function FunctionWorld(){
  const markTransient=useCallback((targetId:string|null,ancestorIds:readonly string[],wakeIds:readonly string[])=>{const token=++feedbackCounter.current;setTransient({token,targetId,ancestorIds,wakeIds});scheduleFeedback(()=>setTransient(v=>v.token===token?noTransient:v),1250);},[scheduleFeedback]);
  const playClickSound=useCallback(()=>{const audio=clickAudioRef.current??new Audio('/audio/click_stereo.ogg');clickAudioRef.current=audio;audio.preload='auto';try{audio.currentTime=0;}catch{/* Asset metadata may still be loading. */}void audio.play().catch(()=>{/* Audio must never block node interaction. */});},[]);
  const playSound=useCallback((key:boolean)=>{if(!key)return;const audio=completeAudioRef.current??new Audio('/audio/Challenge_complete.ogg');completeAudioRef.current=audio;audio.preload='auto';try{audio.currentTime=0;}catch{/* Asset metadata may still be loading. */}void audio.play().catch(()=>{/* Unlock state must not depend on audio playback. */});},[]);
- const initialize=useCallback((id:string)=>{const result=initializeWorldTarget(progressRef.current,id),feedback=summarizeInitializationFeedback(result.addedTargetId,result.addedAncestorIds);commit(result.next);setFocusedId(id);markTransient(result.addedTargetId,feedback.ancestorPulseIds,[]);if(feedback.toastText)addToast(feedback.toastText,worldKeys.has(id),id);playSound(worldKeys.has(id));},[commit,markTransient,addToast,playSound]);
+ const initialize=useCallback((id:string)=>{const result=initializeWorldTarget(progressRef.current,id),feedback=summarizeInitializationFeedback(result.addedTargetId,result.addedAncestorIds);commit(result.next);setFocusedId(id);markTransient(result.addedTargetId,feedback.ancestorPulseIds,[]);if(feedback.toastText)addToast(feedback.toastText);playSound(worldKeys.has(id));},[commit,markTransient,addToast,playSound]);
  const unlock=useCallback((id:string)=>{const before=progressRef.current,beforeStatuses=worldStatuses(before),result=unlockWorldNode(before,id);if(!result.unlocked)return;commit(result.next);const afterStatuses=worldStatuses(result.next);const wakeIds=Object.keys(afterStatuses).filter(nodeId=>beforeStatuses[nodeId]==='locked'&&afterStatuses[nodeId]==='available');markTransient(id,[],wakeIds);const key=worldKeys.has(id);addToast(worldNodes.get(id)?.canonicalName??id,key,id);playSound(key);},[commit,markTransient,addToast,playSound]);
  const flyTo=useCallback((id:string)=>{setFocusedId(id);const p=positions[id];if(p)void flow.setCenter(p.x+50,p.y+50,{zoom:1.08,duration:matchMedia('(prefers-reduced-motion: reduce)').matches?0:420});},[positions,flow]);
  const navigateTo=useCallback((id:string)=>{flyTo(id);setSelectedId(id);},[flyTo]);
@@ -143,7 +141,7 @@ export default function FunctionWorld(){
    <main ref={graphRef} className="world-graph" aria-label="函数知识图谱">
     <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} edgesFocusable={false} minZoom={.04} maxZoom={1.8} onNodeClick={onNodeClick} onNodeMouseEnter={(_,node)=>setHoveredId(node.id)} onNodeMouseLeave={()=>setHoveredId(null)} fitViewOptions={{padding:.18}} proOptions={{hideAttribution:false}}>
      <Background color="#505461" gap={32} size={1}/>
-     <SmoothControls/>
+     <Controls showInteractive={false} position="top-left"/>
      <MiniMap position="top-right" pannable zoomable nodeColor={n=>n.data.status==='unlocked'?'#40aa75':n.data.status==='available'?'#d9b563':'#68717e'} maskColor="rgba(32,35,44,.65)"/>
      <WorldHoverCard nodeId={hoveredId??focusedId} positions={positions} statuses={statuses} initializing={!progress.initialized} size={graphSize}/>
     </ReactFlow>
@@ -153,7 +151,7 @@ export default function FunctionWorld(){
    <aside id="world-progress-panel" className="world-sidebar"><h2>学习进度</h2><p className="world-sidebar-total" aria-label={`${counts.unlocked} / ${counts.total}，${counts.percentage}% 已掌握`}><span>{counts.unlocked} / {counts.total}</span><small>{counts.percentage}% 已掌握</small></p>{counts.modules.map(m=><div className="world-module-progress" key={m.id}><div><span>{m.label}</span><strong>{m.unlocked}/{m.total}</strong></div><div className="world-progress-track"><i style={{width:`${m.total?m.unlocked/m.total*100:0}%`}}/></div></div>)}<p className="world-side-note">进度只计实际已掌握节点。Weak 关系不参与解锁与完成率。</p><p className="world-side-note">当前进度保存在此浏览器的本机存储中。</p></aside>
   </div>
   </div>
-  {!selectedDetail&&<WorldToasts toasts={toasts} onDismiss={id=>setToasts(items=>items.filter(t=>t.id!==id))}/>}
-  {selectedDetail&&<WorldDrawer key={selectedDetail.identity.nodeId} detail={selectedDetail} status={statuses[selectedDetail.identity.nodeId] as NodeStatus} toasts={toasts} onDismiss={id=>setToasts(items=>items.filter(t=>t.id!==id))} onClose={()=>setSelectedId(null)} onNavigate={navigateTo} onUnlock={progress.initialized?unlock:initialize} onPath={showPath}/>}
+  {!selectedDetail&&<WorldToasts toasts={toasts}/>}
+  {selectedDetail&&<WorldDrawer key={selectedDetail.identity.nodeId} detail={selectedDetail} status={statuses[selectedDetail.identity.nodeId] as NodeStatus} toasts={toasts} onClose={()=>setSelectedId(null)} onNavigate={navigateTo} onUnlock={progress.initialized?unlock:initialize} onPath={showPath}/>} 
  </div>;
 }
