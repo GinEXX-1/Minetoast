@@ -23,6 +23,7 @@ test('portal navigation captures both pages for a fade transition',async({page})
   if(transition)void transition.ready.then(()=>sessionStorage.setItem('motion-transition-ready','true')).catch(()=>sessionStorage.setItem('motion-transition-ready','false'));
  }));
  await page.goto('/');await expect(page.locator('.portal-card').first()).toBeVisible();
+ await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
  await page.locator('.portal-card[href="/function-world"]').click();await page.waitForURL('**/function-world');
  expect(await page.evaluate(()=>sessionStorage.getItem('motion-transition'))).toBe('true');
  await expect.poll(()=>page.evaluate(()=>sessionStorage.getItem('motion-transition-ready'))).toBe('true');
@@ -34,6 +35,8 @@ test('important unlock produces visible bounded particles and a draggable modal 
  const drawer=page.getByRole('dialog');
  const timing=await drawer.evaluate(element=>element.getAnimations().map(animation=>animation.effect?.getTiming().easing));
  expect(timing).toContain('linear');
+ const opacityFrames=await drawer.evaluate(element=>element.getAnimations().flatMap(animation=>animation.effect instanceof KeyframeEffect?animation.effect.getKeyframes().map(frame=>Number(frame.opacity)):[]));
+ expect(opacityFrames).toEqual(expect.arrayContaining([0,1]));
  const toast=drawer.locator('.kw-motion-toast.key');
  await expect(toast).toContainText('关键成就达成');
  await expect(toast.locator('.kw-spark')).toHaveCount(24);
@@ -59,11 +62,23 @@ test('drawer wheel and graph zoom produce intermediate positions without changin
  const before=await zoom(page);await page.getByRole('button',{name:'Zoom In',exact:true}).click();
  const samples=await page.locator('.react-flow__viewport').evaluate(async element=>{const values:number[]=[];for(let i=0;i<12;i++){await new Promise(requestAnimationFrame);values.push(new DOMMatrix(getComputedStyle(element).transform).a);}return values;});
  expect(new Set(samples).size).toBeGreaterThan(2);expect(samples.at(-1)).toBeGreaterThan(before);
+ await expect.poll(()=>zoom(page)).toBeGreaterThan(before+.1);
  const graph=page.locator('.world-graph'),box=await graph.boundingBox();
  await page.mouse.move(box!.x+box!.width*.5,box!.y+box!.height*.5);
  const wheelBefore=await zoom(page);await page.mouse.wheel(0,-90);
  await expect.poll(()=>zoom(page)).toBeGreaterThan(wheelBefore);
  expect(await page.evaluate(key=>localStorage.getItem(key),worldProgressStorageKey)).toBe(progress);
+});
+
+test('curriculum hover summary leaves with the pointer and zoom has a visible animated step',async({page})=>{
+ await page.goto('/systems/sets-logic');
+ const node=page.getByRole('button',{name:'集合的概念，可解锁',exact:true});
+ await node.hover();await expect(page.locator('.world-node-tooltip')).toBeVisible();
+ await page.locator('.world-toolbar').hover();await expect(page.locator('.world-node-tooltip')).toHaveCount(0);
+ const before=await zoom(page);await page.getByRole('button',{name:'Zoom In',exact:true}).click();
+ const samples=await page.locator('.react-flow__viewport').evaluate(async element=>{const values:number[]=[];for(let i=0;i<14;i++){await new Promise(requestAnimationFrame);values.push(new DOMMatrix(getComputedStyle(element).transform).a);}return values;});
+ expect(new Set(samples).size).toBeGreaterThan(2);
+ await expect.poll(()=>zoom(page)).toBeGreaterThan(before+.1);
 });
 
 test('curriculum dialog respects reduced motion and notifications remain accessible',async({page})=>{

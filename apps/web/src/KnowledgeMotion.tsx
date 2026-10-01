@@ -121,9 +121,14 @@ export function useSmoothGraphWheel(ref:RefObject<HTMLElement|null>){
 
 export function MotionControls({position='top-left'}:{position?:'top-left'|'bottom-left'}){
  const flow=useReactFlow();
+ const zoom=(direction:1|-1)=>{
+  const current=flow.getZoom(),step=Math.max(.12,current*.4);
+  const target=Math.max(.04,Math.min(1.8,current+direction*step));
+  void flow.zoomTo(target,{duration:motionTime(520),ease:smoothEase,interpolate:'linear'});
+ };
  return <Controls position={position} showZoom={false} showFitView={false} showInteractive={false}>
-  <ControlButton aria-label="Zoom In" onClick={()=>void flow.zoomIn({duration:motionTime(420),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></ControlButton>
-  <ControlButton aria-label="Zoom Out" onClick={()=>void flow.zoomOut({duration:motionTime(420),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M2 7h12v2H2z"/></svg></ControlButton>
+  <ControlButton aria-label="Zoom In" onClick={()=>zoom(1)}><svg viewBox="0 0 16 16"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></ControlButton>
+  <ControlButton aria-label="Zoom Out" onClick={()=>zoom(-1)}><svg viewBox="0 0 16 16"><path d="M2 7h12v2H2z"/></svg></ControlButton>
   <ControlButton aria-label="Fit View" onClick={()=>void flow.fitView({padding:.18,duration:motionTime(480),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M2 6V2h4v2H4v2zm8-4h4v4h-2V4h-2zM2 10h2v2h2v2H2zm10 0h2v4h-4v-2h2z"/></svg></ControlButton>
  </Controls>;
 }

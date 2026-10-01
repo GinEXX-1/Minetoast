@@ -5,10 +5,11 @@
 #root.kw-page-exit{animation:kw-page-out 160ms linear forwards}
 .knowledge-portal .portal-card{transition:transform var(--kw-hover-motion) linear,border-color var(--kw-hover-motion) linear,box-shadow var(--kw-hover-motion) linear}
 .function-world .world-search-results,.function-world .world-node-tooltip{animation:kw-page-in 140ms linear}
-.world-node-tooltip{pointer-events:auto;transition:opacity 100ms linear}
+.world-node-tooltip{pointer-events:none}
 .function-world .world-drawer{scroll-behavior:auto;overscroll-behavior:contain}
 .function-world .world-drawer[data-closing=true]{pointer-events:none}
 .world-drawer::backdrop{animation:kw-page-in var(--kw-panel-motion) linear}
+.world-drawer[data-closing=true]::backdrop{animation:kw-page-out 220ms linear forwards}
 .function-world .world-card.target-pulse .kw-frame{animation:p3-frame-unlock 650ms linear}
 .function-world .world-card.ancestor-pulse .kw-frame{animation:p3-ancestor-flash 480ms linear}
 .function-world .world-card.wake .kw-frame{animation:p3-available-breathe 700ms linear}
