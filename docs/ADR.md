@@ -76,3 +76,17 @@
 决定：初始化禁止 Toast/重粒子；性能合成图与数学内容验收分开；真 PostgreSQL 并发测试；函数单域切片过门后再扩张。
 备选：一次铺全量 350 节点、只靠视觉冒烟验收。
 取舍：较晚获得完整世界，但每次扩张有可复用的验证基础。
+
+## ADR-011 — Knowledge Dependency Quality Gate 取代逐项人工签审硬门
+
+背景：逐项外部人工签审会把所有节点和边绑定到单一人工瓶颈，也不能保证依赖的必要性判断一致。教材引用和图结构检查本身都不足以判断一个概念是否是另一个能力的必要前置。
+决定：每条 Dependency 记录 Canonical Textbook Evidence、数学定义、反事实前置测试、图谱结构上下文和 rationale，并输出 `KEEP_STRONG`、`DOWNGRADE_TO_WEAK`、`REMOVE` 或 `REVIEW_REQUIRED` 与 `HIGH`、`MEDIUM`、`LOW` confidence。完整且无冲突的 `HIGH` 自动通过；`MEDIUM` 需两次独立 AI Review 一致；`LOW`、证据冲突、定义歧义或 AI 冲突进入 `REVIEW_REQUIRED`。未通过的依赖不作为有效边发布，不阻断无关的已通过候选。人工 override 仍可记录，但不是所有内容的强制门。
+边界：Graph Validator 继续校验 DAG、cycle、orphan、transitive redundancy、overconnected 和重复边；其结果不用于推断数学必要性。结构性 orphan 作为发布报告 warning，不能把待决依赖自动转为 Strong。
+备选：保留所有节点/边的人工签审硬门；仅依据教材章节顺序自动推导依赖。取舍：前者吞吐量低，后者缺乏数学有效性；新门禁引入 AI Review provenance 与冲突处理成本，但保留可审计结论。
+重审条件：出现可验证的外部教研工作流、AI Review 质量无法满足抽检要求，或图谱规模使每边双轮 Review 成本不可接受。
+
+## ADR-012 — Phase 2B候选隔离及独立评审一致性
+
+日期：2026-09-24。P2A本体和P1回归数据冻结，P2B另存提案、独立review和有效edge seed；外部基础与范围未定节点保留记录，但不伪装为active DAG的无前置root。候选包不直接发布。
+独立评审一致指依赖决定一致；MEDIUM与HIGH的一致意见按较保守MEDIUM处理。LOW、不同决定、证据冲突或定义歧义仍进入REVIEW_REQUIRED。HIGH判断须先检查已有review冲突，不能提前短路放行。此规则细化ADR-011，并取代旧说明中的“置信度必须逐字一致”；保留P1审核记录原文作为历史，不回写其结论。
+完整关系路径使用独立的includeWeak遍历，解锁与快速初始化固定使用Strong索引。本轮提供离线模拟，不切换在线图或实施Phase 2C。

@@ -68,4 +68,4 @@ v1 结构：schemaVersion=1、graphReleaseId、exportedAt、unlockedNodeIds。�
 
 ## 5. 发布结构校验的剩余服务职责
 
-SQL 提供外键、ID、唯一性、范围与审核元数据约束，但不能把“知识合理”作为 SQL CHECK。发布器必须保证：节点/边审核；节点内容完整；全 enabled 图 DAG；Strong 传递约简；普通≤3、例外≤5；root 理由；区域父节点必须同域 L1，模块属域；Landmark 指向对应域 key_achievement；layout 的 domain 与节点匹配；资产类型/尺寸/来源/审核与引用匹配。JSONB 内部结构、节点永久 ID 不允许修改、管理员 PATCH 的版本冲突均在服务层实现并测试。
+SQL 提供外键、ID、唯一性、范围与质量元数据约束，但不能把“知识合理”作为 SQL CHECK。发布器必须保证：节点内容完整；每条有效 Dependency 通过 Knowledge Dependency Quality Gate；全有效图 DAG；Strong 传递约简；普通≤3、例外≤5；root 理由；区域父节点必须同域 L1，模块属域；Landmark 指向对应域 key_achievement；layout 的 domain 与节点匹配；资产类型/尺寸/来源/审核与引用匹配。JSONB 内部结构、节点永久 ID 不允许修改、管理员 PATCH 的版本冲突均在服务层实现并测试。

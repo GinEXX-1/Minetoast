@@ -3,7 +3,7 @@ import {randomUUID} from 'node:crypto';
 
 test('production layout, account initialization, non-cascading revoke and persistence',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/');
+  await page.goto('/legacy');
   await expect(page.locator('.knowledge-card')).toHaveCount(20);
   await expect(page.locator('.react-flow__minimap')).toBeVisible();
   await page.getByLabel('显示 Weak 弱依赖').check();
@@ -45,8 +45,12 @@ test('production layout, account initialization, non-cascading revoke and persis
 });
 
 test('mobile layout renders without overflow',async({page})=>{
-  await page.setViewportSize({width:390,height:844});await page.goto('/');
+  await page.setViewportSize({width:390,height:844});await page.goto('/legacy');
   await expect(page.locator('.knowledge-card')).toHaveCount(20);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(390);
+  await expect(page.locator('.react-flow__minimap')).toBeVisible();
+  expect((await page.locator('.react-flow').boundingBox())!.height).toBeGreaterThan(300);
+  await page.getByLabel('定位知识').selectOption('HS-FUNC-QUAD-001');await page.getByRole('button',{name:'Fly-to',exact:true}).click();
+  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toBeInViewport();
   await page.screenshot({path:'test-results/mobile.png'});
 });

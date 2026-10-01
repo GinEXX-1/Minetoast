@@ -15,7 +15,7 @@ export async function openDatabase(options:{mode?:string;url?:string;directory?:
  }
  if(mode!=='postgres')throw new Error('Unsupported DATABASE_MODE');
  const connectionString=options.url??process.env.DATABASE_URL;
- if(!connectionString)throw new Error('Set DATABASE_URL for PostgreSQL, or use pnpm dev:local for explicit local testing.');
+ if(!connectionString)throw new Error('Set DATABASE_URL for PostgreSQL, or use pnpm dev for explicit local testing.');
  const pool=new pg.Pool({connectionString,max:8});
  const wrap=(q:pg.Pool|pg.PoolClient):Sql=>({query:async <T>(s:string,p?:unknown[])=>({rows:(await q.query(s,p)).rows as T[]}),exec:async s=>{await q.query(s);}});
  return {...wrap(pool),kind:'postgres',transaction:async fn=>{const client=await pool.connect();try{await client.query('BEGIN');const result=await fn(wrap(client));await client.query('COMMIT');return result;}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}},close:()=>pool.end()};

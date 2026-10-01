@@ -1,4 +1,6 @@
 import type { KnowledgeNode, KnowledgeEdge } from '../../packages/domain/src/index';
+import {fixtureResources} from './resources';
+import {textbookReferences,pinyin,initials,examples} from './textbook-references';
 export const FIXTURE_VERSION = 'phase1-function-20-v1';
 export const nodeSpecs = [
  ['MS-NUM-REAL-001','实数','数的起点','middle_school','有理数与无理数统称实数。','\\mathbb{R}',0,0],
@@ -23,12 +25,12 @@ export const nodeSpecs = [
  ['HS-FUNC-APPLY-001','函数模型的简单应用','连接真实问题','high_school','根据情境选择表达式、说明变量含义，并检查实际取值范围。','y=f(x),\\quad x\\in D_{\\text{实际}}',8,2],
 ] as const;
 export const fixtureNodes: KnowledgeNode[] = nodeSpecs.map((s,i)=>({
- id:s[0],nameZh:s[1],achievementName:s[2],stage:s[3],descriptionShort:s[4],contentDetailed:s[4],
+ id:s[0],nameZh:s[1],achievementName:s[2],stage:s[3],descriptionShort:s[4],contentDetailed:s[4]+'\n\n'+examples[i],
  domainId:'functions',moduleId:s[3]==='middle_school'?'foundation':'function-core',tags:s[3]==='middle_school'?['初中','测试']:['测试'],
  nodeType:i===19?'key_achievement':i===6?'core':'normal',difficulty:2,gaokaoImportance:3,
- textbookReferences:[],formulas:[{id:'main',latex:s[5],explanation:s[4],conditions:i===11?'此处展示的是给定区间内严格增函数的定义条件。':'使用前须检查对应表达式的定义域和参数条件。'}],
- skillsRequired:[],commonQuestionTypes:[],commonMistakes:[],namePinyin:'',pinyinInitials:'',aliases:[],studentAliases:i===15?['抛物线','开口向上']:[],mathNotationAliases:[],
- worldLandmark:false,isRoot:i===0,rootRationale:i===0?'测试切片的基础入口，不代表实数没有更基础的知识。':undefined,
+ textbookReferences:textbookReferences(i),formulas:[{id:'main',latex:s[5],explanation:s[4],conditions:i===11?'对指定区间内任意 x₁<x₂，严格增函数均满足所示不等式。':i===4?'a、b 为实数且 a<b；此式表示闭区间。':i===16?'h、k 为实常数；新定义域为所有满足 x-h 属于原定义域的 x。':'按本节给定定义域和参数条件使用，不外推至未说明的范围。'}],
+ skillsRequired:[],commonQuestionTypes:['概念辨析','给定条件下的计算与判断'],commonMistakes:[examples[i].split('。').filter(Boolean).at(-1)!],namePinyin:pinyin[i],pinyinInitials:initials[i],aliases:[],studentAliases:i===15?['抛物线','开口向上']:[],mathNotationAliases:i===15?['x²','x^2','a(x-h)^2+k']:i===6?['f(x)']:[],
+ worldLandmark:i===19,isRoot:i===0,rootRationale:i===0?'测试切片的基础入口，不代表实数没有更基础的知识。':undefined,
  maxStrongPrerequisites:3,keyAchievementRationale:i===19?'函数切片中多条知识路径的综合应用测试。':undefined,
  reviewStatus:'REVIEW_REQUIRED',retired:false,createdAt:'2026-09-06T00:00:00.000Z',updatedAt:'2026-09-06T00:00:00.000Z'
 }));
@@ -50,6 +52,7 @@ const strong: [number,number,string][] = [
 ];
 const weak: [number,number,string][] = [[14,15,'直线与抛物线的比较有助于理解，但不作为解锁门槛。'],[11,13,'单调性有助于定位最值，但本切片可直接从图像读取。'],[12,16,'对称性有助于比较平移前后的图像，不决定解锁。']];
 export const fixtureEdges: KnowledgeEdge[] = [...strong.map(e=>[...e,'strong'] as const),...weak.map(e=>[...e,'weak'] as const)].map((e,i)=>({
- id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,sourceNodeId:nodeSpecs[e[0]][0],targetNodeId:nodeSpecs[e[1]][0],rationale:e[2],dependencyType:e[3],enabled:true,reviewStatus:'REVIEW_REQUIRED'
+ id:`00000000-0000-4000-8000-${String(i+1).padStart(12,'0')}`,sourceNodeId:nodeSpecs[e[0]][0],targetNodeId:nodeSpecs[e[1]][0],rationale:e[2],dependencyType:e[3],enabled:true,reviewStatus:'REVIEW_REQUIRED',
+ canonicalTextbookEvidence:[],canonicalEvidenceConflict:false,mathematicalDefinition:'',definitionAmbiguous:false,prerequisiteCounterfactual:'',graphContext:'',qualityRationale:'',qualityDecision:'REVIEW_REQUIRED',qualityConfidence:'LOW',qualityState:'REVIEW_REQUIRED',aiReviews:[]
 }));
-export const fixture = {schemaVersion:1 as const,fixtureVersion:FIXTURE_VERSION,contentMode:'test' as const,notice:'20 个交互测试节点；依赖与内容尚未经过正式教研审核，不作为完整学习路径。',nodes:fixtureNodes,edges:fixtureEdges};
+export const fixture = {schemaVersion:1 as const,fixtureVersion:FIXTURE_VERSION,contentMode:'test' as const,notice:'20 个交互测试节点；教材出处为待复核候选，依赖与内容尚未正式签审。',nodes:fixtureNodes,edges:fixtureEdges,...fixtureResources};

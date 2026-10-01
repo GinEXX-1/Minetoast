@@ -1,0 +1,35 @@
+{
+  "environment": {
+    "browser": "153.0.8010.48",
+    "cpu": "Apple M2",
+    "platform": "darwin",
+    "arch": "arm64",
+    "viewport": "1440x900"
+  },
+  "graph": {
+    "nodes": 400,
+    "edges": 1140
+  },
+  "layoutMs": [
+    542.1000000014901,
+    599.6000000014901,
+    573.1000000014901,
+    512.3999999985099,
+    565.2000000029802
+  ],
+  "layoutP95": 599.6000000014901,
+  "panMedianFPS": 59.88023952095874,
+  "panFrames": 224,
+  "cpu4xLongTasks": [
+    {
+      "start": 1410,
+      "duration": 553
+    }
+  ],
+  "cpu4xConsecutiveOver200ms": false,
+  "inputToFrameP95": 38.70000000298023,
+  "inputSamples": 30,
+  "cpu4xInputP95": 126.89999999850988,
+  "eventP95": 56,
+  "notes": "5 cold page loads; rAF while actively dragging (not GPU presentation FPS); 30 input events to second rAF per CPU setting. Baseline 100ms budget and CPU4x no consecutive >200ms are separate requirements."
+}

@@ -1,0 +1,48 @@
+import {test,expect} from '@playwright/test';
+import {randomUUID} from 'node:crypto';
+test('search, directed paths, map, sparse backup and reduced-motion preferences',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/legacy');
+ await expect(page.locator('.knowledge-card')).toHaveCount(20);
+ await page.getByLabel('搜索知识或数学符号').fill('ECHS');
+ await expect(page.locator('.search-results button').first()).toHaveText('二次函数的图像与性质');
+ await page.getByLabel('定位知识').selectOption('HS-FUNC-QUAD-001');
+ await page.getByRole('button',{name:'显示路径',exact:true}).click();
+ await expect(page.getByTestId('node-HS-FUNC-LINEAR-001')).toHaveCount(0);
+ await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toBeVisible();
+ await page.getByLabel('路径模式').selectOption('between');
+ await page.getByLabel('路径终点').selectOption('MS-NUM-REAL-001');
+ await page.getByRole('button',{name:'显示路径',exact:true}).click();
+ await expect(page.getByText('无可达强依赖路径',{exact:true})).toBeVisible();
+ await expect(page.locator('.knowledge-card')).toHaveCount(0);
+ await page.getByRole('button',{name:'退出路径'}).click();
+ await expect(page.locator('.knowledge-card')).toHaveCount(20);
+ await page.getByRole('button',{name:'声音已开启'}).click();await page.reload();
+ await expect(page.getByRole('button',{name:'声音已关闭'})).toBeVisible();
+ await page.getByRole('button',{name:'登录 / 注册'}).click();await page.getByRole('button',{name:'还没有账户？注册'}).click();
+ await page.getByRole('textbox',{name:'用户名',exact:true}).fill('flow_'+randomUUID().slice(0,8));await page.getByLabel('密码',{exact:true}).fill(randomUUID());await page.getByRole('button',{name:'创建并登录'}).click();
+ await expect(page.getByRole('button',{name:'完成初始化'})).toBeVisible();
+ const graph=await(await page.request.get('/api/v1/knowledge/graph')).json();
+ await page.getByText('进度备份',{exact:true}).click();
+ await page.getByLabel('选择进度备份').setInputFiles({name:'sparse.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({schemaVersion:1,graphReleaseId:graph.releaseId,exportedAt:new Date().toISOString(),unlockedNodeIds:['HS-FUNC-QUAD-001']}))});
+ await expect(page.getByRole('button',{name:'确认合并备份'})).toBeEnabled();await page.getByRole('button',{name:'确认合并备份'}).click();
+ await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+ await expect(page.getByTestId('node-HS-FUNC-GRAPH-001')).toHaveAttribute('data-status','locked');
+ await expect(page.locator('.unlock-toasts>div')).toHaveCount(0);
+ await page.getByRole('button',{name:'区域地图',exact:true}).click();
+ await expect(page.getByTestId('map-progress')).toHaveText('高中进度 1 / 17');
+ await page.getByRole('button',{name:'放大地图'}).click();await page.getByRole('button',{name:'◇ 函数模型的简单应用',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'函数模型的简单应用',exact:true})).toBeVisible();await page.getByRole('button',{name:'关闭详情'}).click();
+ await page.screenshot({path:'test-results/map.png'});
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'导出备份'}).click();expect((await download).suggestedFilename()).toBe('knowledge-progress.json');
+ await page.getByRole('button',{name:'进入函数知识树'}).click();await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');
+});
+test('rapid initialization coalesces targets without achievement toasts',async({page})=>{
+ await page.goto('/legacy');await page.getByRole('button',{name:'登录 / 注册'}).click();await page.getByRole('button',{name:'还没有账户？注册'}).click();
+ await page.getByRole('textbox',{name:'用户名',exact:true}).fill('batch_'+randomUUID().slice(0,8));await page.getByLabel('密码',{exact:true}).fill(randomUUID());await page.getByRole('button',{name:'创建并登录'}).click();
+ await expect(page.getByRole('button',{name:'完成初始化'})).toBeVisible();
+ const commands:any[]=[];page.on('request',request=>{if(request.url().endsWith('/me/progress/commands'))commands.push(request.postDataJSON());});
+ // Same event-loop burst models fast taps without locator navigation delays.
+ await page.evaluate(()=>{for(const id of ['HS-FUNC-QUAD-001','HS-FUNC-LINEAR-001'])document.querySelector<HTMLElement>(`[data-testid="node-${id}"]`)!.click();});
+ await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');await expect(page.getByTestId('node-HS-FUNC-LINEAR-001')).toHaveAttribute('data-status','unlocked');
+ expect(commands).toHaveLength(1);expect(commands[0].command.targetNodeIds).toHaveLength(2);await expect(page.locator('.unlock-toasts>div')).toHaveCount(0);
+});

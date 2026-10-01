@@ -84,9 +84,9 @@ UserProgress 是 DTO 投影：status 不入表；manuallyUnlocked / initializati
 
 编辑表存草稿及稳定节点身份。学习端只读 graph_head 指向的 graph_releases.snapshot，不能读实时草稿。snapshot 除领域类型的图结构外，包含已审内容、布局、区域/地标及资产引用；对外摘要接口裁去详细内容。全量约 400 节点时，整图不可变快照是可接受的 V1 简化，后续可迁移按实体版本关系表。
 
-管理员发布事务：取得统一图编辑 advisory transaction lock → 读取完整候选图 → 验证内容、DAG、重复、传递约简、前置数量及资源 → 建立规范化 JSON 和 SHA-256 → INSERT release → 原子替换 graph_head → 审计 → 提交。所有编辑/审核/发布均取得相同锁；校验失败不移动指针。审核不能只在前端做。发布器与锁规则尚未实现，本 SQL 不独自保证 DAG。
+管理员发布事务：取得统一图编辑 advisory transaction lock → 读取完整候选图 → 执行 Knowledge Dependency Quality Gate → 对通过的依赖生成有效边 → 验证内容、DAG、重复、传递约简、前置数量及资源 → 建立规范化 JSON 和 SHA-256 → INSERT release → 原子替换 graph_head → 审计 → 提交。所有编辑、质量评估与发布均取得相同锁；校验失败不移动指针。质量判断不能只在前端做。
 
-REVIEW_REQUIRED 的 enabled 依赖会阻断候选图发布，不能简单过滤它然后让 target 变成“无前置”。管理员可明确禁用或复核解决；所有发布节点必须 APPROVED，退休节点不进入新快照。改变已审核数学内容或边自动重置审核状态（Phase 1 服务职责）。
+`REVIEW_REQUIRED`、`REMOVE` 和未完成第二轮 AI Review 的依赖不进入有效发布图，因而不能自动成为 Strong；它们只作为质量报告 warning，不阻断其他已通过节点或边。`KEEP_STRONG` 仅在质量门通过后成为 Strong，`DOWNGRADE_TO_WEAK` 以 Weak 发布。节点不再以逐项人工 `APPROVED` 作为发布硬门，但被明确 `REJECTED` 的节点仍阻断发布。Graph Validator 对候选有效图报告 DAG、cycle、orphan、transitive redundancy、overconnected 和重复边；这些结构信号不代替数学依赖判断。内容或边编辑必须重置该边的质量记录。
 
 永久 ID 不重命名、不复用；后台删除操作默认 retired=true，保留进度外键。发布更新不会级联删除已有解锁。分母采用当前发布快照内 high_school 节点，而非固定 350；归档节点进度保留但不统计。旧用户的知识进度可能因新版本分母改变，界面显示内容版本更新说明。历史版本回退通过移动 head 实现，不修改历史快照；需与进度命令使用同一锁序。
 

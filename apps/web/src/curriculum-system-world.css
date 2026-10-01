@@ -1,0 +1,34 @@
+/* The candidate worlds share the Function World shell, frame and drawer styles. */
+.curriculum-world{--wiki-bg:#292d39;min-height:100dvh;font-family:KnowledgeMinecraft,"Microsoft YaHei",sans-serif}
+.curriculum-world .world-header p{max-width:900px;line-height:1.4}
+.curriculum-world .world-card{width:100px;height:100px}
+.curriculum-world .world-card .kw-frame__icon-safe svg{display:block;image-rendering:pixelated}
+.curriculum-world .react-flow__node{overflow:visible}
+.curriculum-world .react-flow__edge{pointer-events:none}
+.curriculum-world .react-flow__edge.animated .react-flow__edge-path{stroke-dasharray:5 4;animation:curriculum-dash 900ms linear infinite}
+.curriculum-world .world-graph{min-height:520px}
+.curriculum-world .world-graph .react-flow__minimap{pointer-events:all}
+.curriculum-world .world-sidebar{min-width:0}
+.curriculum-selected-preview{margin:18px 0;padding:10px 9px;background:#252b35;border:1px solid #596477}
+.curriculum-selected-preview h3{margin:0 0 7px;font-size:14px;font-weight:400;color:#dbe9f5}
+.curriculum-selected-preview p{margin:0 0 10px;color:#c7d2dd;font-size:11px;line-height:1.55}
+.curriculum-selected-preview button,.curriculum-reset{width:100%;text-align:center;font-size:11px}
+.curriculum-reset{margin-top:13px}
+.curriculum-world .world-formula{padding:9px;margin:10px 0}
+.curriculum-world .world-formula .formula{display:flex;justify-content:center;overflow-x:auto;padding:16px 10px}
+.curriculum-world .world-formula p{margin:6px 0 0;font-size:12px}
+.curriculum-world .world-drawer .world-overview{line-height:1.7}
+.curriculum-world .world-drawer .world-relation small{display:block}
+.curriculum-math-inline{font-family:KaTeX_Main,"Times New Roman",serif;font-size:1.08em;letter-spacing:0;white-space:normal}
+.curriculum-world-toasts{position:fixed;right:16px;top:16px;z-index:1050;display:flex;flex-direction:column;align-items:flex-end;gap:7px;pointer-events:none}
+.curriculum-world-toasts>div{padding:10px 13px;background:#253b2c;border:2px solid #80ba87;box-shadow:4px 4px 0 #121712;color:#eef2e7;font-size:12px;animation:curriculum-toast 240ms steps(4,end)}
+.curriculum-world-toasts>button{pointer-events:auto;padding:2px 8px}
+.curriculum-particles{position:absolute;left:50%;top:50%;pointer-events:none;z-index:5}
+.curriculum-particles i{position:absolute;width:4px;height:4px;background:#f1d379;animation:curriculum-particle .62s steps(5,end) forwards}
+.curriculum-particles i:nth-child(1){--dx:-40px;--dy:-35px}.curriculum-particles i:nth-child(2){--dx:40px;--dy:-30px}.curriculum-particles i:nth-child(3){--dx:-48px;--dy:10px}.curriculum-particles i:nth-child(4){--dx:44px;--dy:18px}.curriculum-particles i:nth-child(5){--dx:-18px;--dy:-45px}.curriculum-particles i:nth-child(6){--dx:23px;--dy:44px}
+@keyframes curriculum-dash{to{stroke-dashoffset:-18}}
+@keyframes curriculum-particle{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+@keyframes curriculum-toast{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(max-width:980px){.curriculum-world .world-graph{min-height:520px}}
+@media(max-width:700px){.curriculum-world .world-graph{height:520px}.curriculum-world-toasts{left:12px;right:12px}.curriculum-world-toasts>div{max-width:100%}}
+@media(prefers-reduced-motion:reduce){.curriculum-world .react-flow__edge.animated .react-flow__edge-path,.curriculum-particles i,.curriculum-world-toasts>div{animation:none!important}}

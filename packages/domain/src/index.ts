@@ -1,4 +1,6 @@
 /** Phase 0 contracts. Pure data types; no UI, database driver or runtime validators. */
+export * from './dependency-quality';
+import type {DependencyAIReview,DependencyConfidence,DependencyQualityDecision,DependencyQualityState,CanonicalTextbookEvidence} from './dependency-quality';
 export type NodeId = string; // API validates HS/MS ID pattern; identity never reused.
 export type ISODateTime = string;
 export type Rating = 1 | 2 | 3 | 4 | 5;
@@ -9,6 +11,8 @@ export type NodeStatus = 'locked' | 'available' | 'unlocked';
 export interface TextbookReference {
   publisher: string; series: string; edition: string; volume: string;
   chapter: string; section: string; page?: string; sourceUrl?: string;
+  sourceRef?: string; printedPage?: number; pdfPage?: number;
+  evidenceStatus?: CanonicalTextbookEvidence['evidenceStatus'];
 }
 export interface MathFormula { id: string; latex: string; explanation: string; conditions: string; }
 export interface KnowledgeNode {
@@ -31,6 +35,14 @@ export interface KnowledgeEdge {
   id: string; sourceNodeId: NodeId; targetNodeId: NodeId;
   dependencyType: 'strong' | 'weak'; rationale: string; enabled: boolean;
   reviewStatus: ReviewStatus; reviewedBy?: string; reviewedAt?: ISODateTime;
+  canonicalTextbookEvidence: readonly CanonicalTextbookEvidence[];
+  canonicalEvidenceConflict: boolean;
+  mathematicalDefinition: string; prerequisiteCounterfactual: string; graphContext: string;
+  definitionAmbiguous: boolean;
+  qualityDecision: DependencyQualityDecision; qualityConfidence: DependencyConfidence;
+  qualityState: DependencyQualityState; qualityRationale: string;
+  aiReviews: readonly DependencyAIReview[];
+  qualityOverrideBy?: string; qualityOverrideAt?: ISODateTime;
 }
 export interface MathDomain {
   id: string; nameZh: string; nameEn: string; achievementThemeName?: string;

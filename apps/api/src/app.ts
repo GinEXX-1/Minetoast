@@ -9,11 +9,14 @@ import {hash,verify} from '@node-rs/argon2';
 import {z} from 'zod';
 import type {Database} from '../../../packages/database/src/connection';
 import {ApiError,applyCommand,envelopeSchema,getProgress} from './progress';
+import {previewBackup} from './backup';
+import type {Graph} from '../../../packages/graph-core/src/index';
+import {registerAuthoring,registerSnapshots} from './authoring';
 const digest=(value:string)=>createHash('sha256').update(value).digest('hex');
 const credentials=z.object({username:z.string().regex(/^[A-Za-z0-9_]{3,32}$/),password:z.string().min(12).max(128)}).strict();
 const argonOptions={memoryCost:19456,timeCost:2,parallelism:1};
-export async function makeApp(db:Database,options:{origin?:string;serveStatic?:boolean;rateLimit?:boolean}={}){
- const app=Fastify({logger:false,bodyLimit:64*1024});
+export async function makeApp(db:Database,options:{origin?:string;serveStatic?:boolean;rateLimit?:boolean;adminDb?:Database}={}){
+ const app=Fastify({logger:false,bodyLimit:1024*1024});
  const production=process.env.NODE_ENV==='production';
  const origin=options.origin??process.env.APP_ORIGIN??'http://localhost:4173';
  const origins=new Set([origin,...(production?[]:['http://terminal.local:4173'])]);
@@ -35,15 +38,19 @@ export async function makeApp(db:Database,options:{origin?:string;serveStatic?:b
   reply.setCookie(cookieName,token,{httpOnly:true,secure:production,sameSite:'lax',path:'/',maxAge:604800});return csrf;
  }
  app.setErrorHandler((error:any,request,reply)=>{
-  if(error instanceof z.ZodError)return reply.code(422).send({code:'INVALID_INPUT',message:'请检查输入：用户名为 3–32 位字母、数字或下划线；密码为 12–128 个字符。',requestId:request.id});
+  if(error instanceof z.ZodError)return reply.code(422).send({code:'INVALID_INPUT',message:'输入格式不正确，请检查字段、长度和取值。',requestId:request.id});
+  if(['23503','23514','22P02'].includes(error.code))return reply.code(422).send({code:'CONSTRAINT_VIOLATION',message:'内容违反数据约束，请检查引用、取值与字段类型。',requestId:request.id});
+  if(error.code==='23505')return reply.code(409).send({code:'DUPLICATE_RECORD',message:'该稳定标识或关联已存在。',requestId:request.id});
   const status=error.statusCode??500;return reply.code(status).send({code:error.code??'SERVER_ERROR',message:status>=500?'暂时无法保存，请稍后重试。':error.message,requestId:request.id});
  });
  app.get('/api/v1/health',async()=>{await db.query('SELECT 1');return {ok:true};});
- app.get('/api/v1/knowledge/graph',async(_,reply)=>{
+ app.get('/api/v1/knowledge/graph',async(request,reply)=>{
   const data=(await db.query<{snapshot:any;content_hash:string}>('SELECT r.snapshot,r.content_hash FROM graph_releases r JOIN graph_head h ON h.release_id=r.id')).rows[0];
-  reply.header('Cache-Control','no-cache').header('ETag','"'+data.content_hash+'"');return data.snapshot;
+  const etag='"'+data.content_hash+'"';reply.header('Cache-Control','no-cache').header('ETag',etag);
+  if(request.headers['if-none-match']===etag)return reply.code(304).send();
+  return {...data.snapshot,nodes:data.snapshot.nodes.map(({contentDetailed:_detail,...node}:any)=>node)};
  });
- app.get('/api/v1/auth/me',async(request,reply)=>{reply.header('Cache-Control','no-store');try{const a=await account(request);return {user:{id:a.id,username:a.username},csrfToken:a.csrf};}catch(e){if(e instanceof ApiError&&e.statusCode===401)return {user:null,csrfToken:null};throw e;}});
+ app.get('/api/v1/auth/me',async(request,reply)=>{reply.header('Cache-Control','no-store');try{const a=await account(request);return {user:{id:a.id,username:a.username,role:a.role},csrfToken:a.csrf};}catch(e){if(e instanceof ApiError&&e.statusCode===401)return {user:null,csrfToken:null};throw e;}});
  const limits:FastifyContextConfig=options.rateLimit===false?{}:{rateLimit:{max:12,timeWindow:'1 minute',keyGenerator:(request:FastifyRequest)=>request.ip}};
  // IP limit + bounded per-name bucket, both applied before expensive Argon2 work.
  const attempts=new Map<string,{count:number;expires:number}>();
@@ -57,17 +64,32 @@ export async function makeApp(db:Database,options:{origin?:string;serveStatic?:b
  });
  app.post('/api/v1/auth/login',{config:limits},async(request,reply)=>{
   sameOrigin(request);const data=credentials.parse(request.body);nameLimit(data.username);
-  const user=(await db.query<{id:string;username:string;password_hash:string;disabled_at:Date|null}>('SELECT id,username,password_hash,disabled_at FROM users WHERE lower(username)=lower($1)',[data.username])).rows[0];
+ const user=(await db.query<{id:string;username:string;role:string;password_hash:string;disabled_at:Date|null}>('SELECT id,username,role,password_hash,disabled_at FROM users WHERE lower(username)=lower($1)',[data.username])).rows[0];
   const valid=await verify(user&&!user.disabled_at?user.password_hash:dummyHash,data.password);
   if(!user||user.disabled_at||!valid)throw new ApiError(401,'INVALID_CREDENTIALS','用户名或密码不正确。');
   // Rotate a previous session when an account logs in again in the same browser.
   const old=request.cookies[cookieName];if(old)await db.query('UPDATE sessions SET revoked_at=now() WHERE token_hash=$1',[digest(old)]);
   await db.query('UPDATE users SET last_login_at=now() WHERE id=$1',[user.id]);
-  return {user:{id:user.id,username:user.username},csrfToken:await session(user.id,reply)};
+  return {user:{id:user.id,username:user.username,role:user.role},csrfToken:await session(user.id,reply)};
  });
  app.post('/api/v1/auth/logout',async(request,reply)=>{const user=await writer(request);await db.query('UPDATE sessions SET revoked_at=now() WHERE token_hash=$1',[digest(user.token)]);reply.clearCookie(cookieName,{path:'/',secure:production,httpOnly:true,sameSite:'lax'});return {ok:true};});
  app.get('/api/v1/me/progress',async(request,reply)=>{const user=await account(request);reply.header('Cache-Control','no-store');return db.transaction(tx=>getProgress(tx,user.id));});
  app.post('/api/v1/me/progress/commands',async(request,reply)=>{const user=await writer(request);reply.header('Cache-Control','no-store');return applyCommand(db,user.id,envelopeSchema.parse(request.body));});
+ app.get('/api/v1/me/progress/export',async(request,reply)=>{
+  const user=await account(request);reply.header('Cache-Control','no-store');
+  return db.transaction(async tx=>{await tx.query('SELECT release_id FROM graph_head FOR SHARE');await tx.query('SELECT user_id FROM user_progress_state WHERE user_id=$1 FOR SHARE',[user.id]);const p=await getProgress(tx,user.id);return {schemaVersion:1,graphReleaseId:p.graphReleaseId,exportedAt:new Date().toISOString(),unlockedNodeIds:p.unlocked.map(n=>n.nodeId)};});
+ });
+ app.post('/api/v1/me/progress/import/preview',async(request,reply)=>{
+  const user=await writer(request);reply.header('Cache-Control','no-store');
+  return db.transaction(async tx=>{
+   const head=(await tx.query<{release_id:string}>('SELECT release_id FROM graph_head FOR SHARE')).rows[0];
+   await tx.query('SELECT user_id FROM user_progress_state WHERE user_id=$1 FOR SHARE',[user.id]);
+   const graph=(await tx.query<{snapshot:Graph}>('SELECT snapshot FROM graph_releases WHERE id=$1',[head.release_id])).rows[0].snapshot;
+   const progress=await getProgress(tx,user.id);
+   return {...previewBackup(graph,new Set(progress.unlocked.map(n=>n.nodeId)),request.body,head.release_id),revision:progress.revision};
+  });
+ });
+ registerSnapshots(app,db);registerAuthoring(app,options.adminDb??db,account,writer);
  if(options.serveStatic&&existsSync(resolve('dist/index.html'))){await app.register(staticFiles,{root:resolve('dist')});app.setNotFoundHandler((request,reply)=>request.url.startsWith('/api/')?reply.code(404).send({code:'NOT_FOUND',message:'接口不存在。'}):reply.sendFile('index.html'));}
  return app;
 }

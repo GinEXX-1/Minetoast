@@ -30,6 +30,7 @@ jobs:
       - run: pnpm test:pg
         env:
           DATABASE_URL: postgresql://knowledge:ci_only_password@localhost:5432/knowledge_test
+          TEST_PG_ROLES: '1'
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - run: pnpm audit --prod --registry=https://registry.npmjs.org

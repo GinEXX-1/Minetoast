@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "scripts/export-mathcraft-icons.ts",
+  "assetType": "original-pixel-svg",
+  "count": 32,
+  "icons": [
+    {
+      "nodeId": "MS-ALG-LINE-001",
+      "knowledgeName": "数轴",
+      "file": "MS-ALG-LINE-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "9664397df0a095d8b8d2fc25f4887d21a2573bcd447a0cb8f9939a058ed524c6"
+    },
+    {
+      "nodeId": "MS-GEO-COORD-001",
+      "knowledgeName": "平面直角坐标系",
+      "file": "MS-GEO-COORD-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "60b0788edbeabb6d408a8fc9edc8c6c8310cb02e1feff1a9f1ecb6a8561ac6c6"
+    },
+    {
+      "nodeId": "HS-SET-CONCEPT-001",
+      "knowledgeName": "集合的概念",
+      "file": "HS-SET-CONCEPT-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "1ce1464767707899d16d6eb1e92e5254667ad4c59ec326dd56d2495cfe05ea55"
+    },
+    {
+      "nodeId": "HS-ALG-INEQUALITY-001",
+      "knowledgeName": "不等式的性质",
+      "file": "HS-ALG-INEQUALITY-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "d1b2d1f0d6383e7043c177f4c0fb57e1ab6ae5bf5c1e38b0d1c0cdc7bf8a2bae"
+    },
+    {
+      "nodeId": "HS-FUNC-INTERVAL-001",
+      "knowledgeName": "区间表示",
+      "file": "HS-FUNC-INTERVAL-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "32cb97a50aee24f8c347b9e78f7e05831bbf5e1645da883aab0650b60b49fdea"
+    },
+    {
+      "nodeId": "HS-FUNC-MAPPING-001",
+      "knowledgeName": "对应关系",
+      "file": "HS-FUNC-MAPPING-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "98b77187ab7edb572007de075d6cefc91d314b86e5821bd794d2b093bb8e2052"
+    },
+    {
+      "nodeId": "HS-FUNC-CONCEPT-001",
+      "knowledgeName": "函数的概念",
+      "file": "HS-FUNC-CONCEPT-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "0b658a9cb517e3972d8d3e83560a8987e279cc950e66411937903a979f2c0dd7"
+    },
+    {
+      "nodeId": "HS-FUNC-DOMAIN-001",
+      "knowledgeName": "函数的定义域",
+      "file": "HS-FUNC-DOMAIN-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "e0fd2f0e7519b745dbdd21cea74316854f01b565cf76fc7e6bb6e8704e6acc90"
+    },
+    {
+      "nodeId": "HS-FUNC-RANGE-001",
+      "knowledgeName": "函数的值域",
+      "file": "HS-FUNC-RANGE-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "8f5b05e0c7b76e5dfdf90cc0ce8cf8b92b45fe9a6ad8b1a75f2cac3aec835b03"
+    },
+    {
+      "nodeId": "HS-FUNC-VALUE-001",
+      "knowledgeName": "求函数值",
+      "file": "HS-FUNC-VALUE-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "c80d7487e5223b744697393a11a889238f89d88d42225beb8b0611adace8b1e4"
+    },
+    {
+      "nodeId": "HS-FUNC-IDENTITY-001",
+      "knowledgeName": "同一函数的判定",
+      "file": "HS-FUNC-IDENTITY-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "25e4d31666d2a62e601c361436ca8e821c827a083e26913e917f92fc9529f40d"
+    },
+    {
+      "nodeId": "HS-FUNC-ANALYTIC-001",
+      "knowledgeName": "函数的解析表示",
+      "file": "HS-FUNC-ANALYTIC-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "a7b547facd66bc4a4fadfdada7de2b87f44b8fd02cab957660a1747395d546de"
+    },
+    {
+      "nodeId": "HS-FUNC-TABLE-001",
+      "knowledgeName": "函数的列表表示",
+      "file": "HS-FUNC-TABLE-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "d9e1e8386d1cb4de2084c13752d0aabba87037bd54ad6510a5a9e3cbab0e3bca"
+    },
+    {
+      "nodeId": "HS-FUNC-GRAPH-001",
+      "knowledgeName": "函数的图像",
+      "file": "HS-FUNC-GRAPH-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "29470f93ceb988871ec15d285ad7b84f0bc375d8512ad1aea74030b455565547"
+    },
+    {
+      "nodeId": "HS-FUNC-PIECEDEF-001",
+      "knowledgeName": "分段函数的表示",
+      "file": "HS-FUNC-PIECEDEF-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "46f250eb11251a701511a5c566a9dab75cbd8f0900c7a1f7c479e7e279a241c3"
+    },
+    {
+      "nodeId": "HS-FUNC-PIECE-001",
+      "knowledgeName": "分段函数求值",
+      "file": "HS-FUNC-PIECE-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "340832fe98c45e0fd70da1d4f4d07eec2735fd180c4cf657e54e904bfe906217"
+    },
+    {
+      "nodeId": "HS-FUNC-REPRESENT-001",
+      "knowledgeName": "函数表示法的转换",
+      "file": "HS-FUNC-REPRESENT-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "cb6bf276410eaf5da8158c8685b78184117ad4c7398075663aca2a23bbb01517"
+    },
+    {
+      "nodeId": "HS-FUNC-MONO-001",
+      "knowledgeName": "函数的单调性",
+      "file": "HS-FUNC-MONO-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "0a938d62c851ed896013f3d2126e704cc2855f1fda70b5f95ca1f043f771d1f4"
+    },
+    {
+      "nodeId": "HS-FUNC-MONOPROOF-001",
+      "knowledgeName": "用定义证明单调性",
+      "file": "HS-FUNC-MONOPROOF-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "5dea54dad2fdcc664a10897c25dcfee7b2852443eebb5b5760df2775dc00d865"
+    },
+    {
+      "nodeId": "HS-FUNC-MONOINTERVAL-001",
+      "knowledgeName": "求函数的单调区间",
+      "file": "HS-FUNC-MONOINTERVAL-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "629e59f199de9b9ce6aa245993704de65c164e5c93f8f673e52f165d54e186b4"
+    },
+    {
+      "nodeId": "HS-FUNC-EXTREME-001",
+      "knowledgeName": "函数的最大值与最小值",
+      "file": "HS-FUNC-EXTREME-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "bc41cd225b913b69b97c368a2c6015c07a5302cc924761359f53d4ea61952d2c"
+    },
+    {
+      "nodeId": "HS-FUNC-PARITY-001",
+      "knowledgeName": "函数的奇偶性",
+      "file": "HS-FUNC-PARITY-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "a790f22f1273458ca3a248e5d75764ecdefb1a2ab3c568e06f1600155d45d4dc"
+    },
+    {
+      "nodeId": "HS-FUNC-SYMMETRY-001",
+      "knowledgeName": "函数图像的对称性",
+      "file": "HS-FUNC-SYMMETRY-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "13b590a582ccb757934c9f5ca8379612f178df57fd80b0ef23e2adb7a112bacd"
+    },
+    {
+      "nodeId": "HS-FUNC-LINEAR-001",
+      "knowledgeName": "一次函数的图像与性质",
+      "file": "HS-FUNC-LINEAR-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "b4272a521a6b29ce0315100ff1d0b74b87dae444317dfd9bd552a7a6cb7aebfc"
+    },
+    {
+      "nodeId": "HS-FUNC-QUAD-001",
+      "knowledgeName": "二次函数的图像与性质",
+      "file": "HS-FUNC-QUAD-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "1e05b8ab089b610ff93ca70b4c8f7265da8dd3f3af0f81319e56d8ca30527670"
+    },
+    {
+      "nodeId": "HS-FUNC-RECIPROCAL-001",
+      "knowledgeName": "反比例函数的图像与性质",
+      "file": "HS-FUNC-RECIPROCAL-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "1b5381311a15ebb6223d863c52501f9d58984e7e16ae00487a5be41a9a52e769"
+    },
+    {
+      "nodeId": "HS-FUNC-POWER-001",
+      "knowledgeName": "幂函数的图像与性质",
+      "file": "HS-FUNC-POWER-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "316b8e6ad6a477ff7e3aab7ab26f1e89a06a097c7fe1d905fc95363a1f8dceda"
+    },
+    {
+      "nodeId": "HS-FUNC-PLOT-001",
+      "knowledgeName": "描点法作函数图像",
+      "file": "HS-FUNC-PLOT-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "af90c7431c5ac174bb64ebb36dac1a43699790dc10201c04bb2ff5064f8c90d8"
+    },
+    {
+      "nodeId": "HS-FUNC-ZERO-001",
+      "knowledgeName": "函数的零点",
+      "file": "HS-FUNC-ZERO-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "2ab7d7fefa084d07762e0059044fa286e51db18ca2031cb70918c528fe28d361"
+    },
+    {
+      "nodeId": "HS-FUNC-ZEROEXIST-001",
+      "knowledgeName": "函数零点存在定理",
+      "file": "HS-FUNC-ZEROEXIST-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "202e90b16dfb7e29abd071c156645a75051d266a1ac6c04adf68ccbf1bbb3670"
+    },
+    {
+      "nodeId": "HS-FUNC-BISECTION-001",
+      "knowledgeName": "二分法求零点近似值",
+      "file": "HS-FUNC-BISECTION-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "930575bc86ecd701f4cf7ffe8155eeaedda3c0d2110ced86ab7d7460532b10d5"
+    },
+    {
+      "nodeId": "HS-FUNC-APPLY-001",
+      "knowledgeName": "函数模型的简单应用",
+      "file": "HS-FUNC-APPLY-001.svg",
+      "viewBox": "0 0 32 32",
+      "sha256": "283fd6a262a8ebfcabfa13ff0da6e894548651c4e81794b7c8e16a50fd6ce21e"
+    }
+  ]
+}
