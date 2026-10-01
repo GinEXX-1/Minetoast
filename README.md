@@ -28,6 +28,8 @@
 
 需要 Node.js 24 和 pnpm。
 
+macOS 可双击项目根目录中的 `启动 Knowledge World.command`；启动器会检查运行环境，首次运行时安装依赖，启动服务并打开浏览器。关闭启动器对应的终端窗口会停止本地服务。
+
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev
