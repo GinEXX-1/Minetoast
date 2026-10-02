@@ -1,0 +1,23 @@
+@media(max-width:900px){
+  .portal-rail{display:none}
+  .portal-shell{display:block;padding-top:10px}
+  .portal-overview{padding-top:6px}
+  .portal-controls{gap:10px}
+  .portal-filters{display:flex;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:3px}
+  .portal-filters button{flex:0 0 auto;min-height:42px;padding-inline:10px;white-space:nowrap}
+  .portal-card{min-height:132px}
+}
+@media(max-width:560px){
+  .portal-header{grid-template-columns:1fr;gap:5px;min-height:0;padding:12px 14px}
+  .portal-brand{width:150px;grid-row:auto}
+  .portal-brand-image{width:150px;height:62px}
+  .portal-brand-image img{width:300px;height:169px}
+  .portal-brand span{font-size:10px}
+  .portal-title h1{font-size:20px;line-height:1.2}
+  .portal-title p{line-height:1.35}
+  .portal-metrics{gap:6px;padding:10px 8px}
+  .portal-metrics>div{min-width:0;flex:1}
+  .portal-metrics b{font-size:16px}
+  .portal-metrics span{font-size:10px}
+  .portal-metrics i{height:25px}
+}

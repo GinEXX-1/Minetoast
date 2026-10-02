@@ -13,6 +13,7 @@ import {worldGraph} from './function-world-model';
 import {createCurriculumAudioController} from './curriculum-audio';
 import {CurriculumPixelIcon} from './CurriculumPixelIcon';
 import './knowledge-portal.css';
+import './portal-mobile.css';
 
 type System = {
   id: string;
