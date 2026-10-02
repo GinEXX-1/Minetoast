@@ -1,3 +1,4 @@
+import PonderEntry from './ponder/PonderEntry';
 import React,{lazy,memo,Suspense,useCallback,useEffect,useMemo,useRef,useState} from 'react';
 import {ReactFlow,Background,BaseEdge,Handle,MarkerType,MiniMap,Position,useReactFlow,useViewport,type Node as FlowNode,type Edge as FlowEdge,type NodeProps,type EdgeProps} from '@xyflow/react';
 import type {NodeStatus,PathQuery} from '../../../packages/domain/src/index';
@@ -5,13 +6,15 @@ import type {KnowledgeNodeDetail} from '../../../packages/domain/src/knowledge-n
 import {startLayout} from './workers/layout';
 import {KnowledgeNodeFrame} from './KnowledgeNodeFrame';
 import {MathCraftIcon} from './MathCraftIcon';
-import {KnowledgeWorldBrand} from './KnowledgeWorldBrand';
+import {MinetoastBrand} from './MinetoastBrand';
 import {emptyWorldProgress,fallbackWorldPositions,finishWorldInitialization,initializeWorldTarget,parseWorldProgress,searchWorld,summarizeInitializationFeedback,unlockWorldNode,worldDetailById,worldGraph,worldIndex,worldKeys,worldModuleIds,worldNodes,worldPath,worldProgressCounts,worldProgressStorageKey,worldStatuses,type WorldProgress} from './function-world-model';
 import './function-world.css';
 import './function-world-p3.css';
 import './function-world-wiki.css';
 import './mobile-world.css';
 import {MotionControls,MotionToast,PixelBurst,useAnimatedDrawer,useSmoothGraphWheel} from './KnowledgeMotion';
+import {usePreferences} from './settings/preferences';
+import {miniMapPalette} from './settings/graph-colors';
 
 const Formula=lazy(()=>import('./Formula'));
 const statusLabels:Record<NodeStatus,string>={locked:'未满足前置',available:'可以解锁',unlocked:'已掌握'};
@@ -68,6 +71,7 @@ function WorldDrawer({detail,status,toasts,onDismiss,onClose,onNavigate,onUnlock
   <h2>{detail.identity.knowledgeName}</h2><p className="world-achievement">{detail.identity.achievementName} · {detail.identity.englishName}</p>
   <div className="world-detail-meta"><span>{statusLabels[status]}</span><span>重要度 {detail.metadata.importance}/5</span><span>难度 {detail.metadata.difficulty}/5</span><span>证据 {detail.metadata.evidenceStatus}</span></div>
   {detail.metadata.gateStatus==='REVIEW_REQUIRED'&&<p className="world-evidence-warning">教材证据仅覆盖该概念的部分使用情境。完整定义来源尚待复核；当前质量状态未提升。</p>}
+  <PonderEntry nodeId={id}/>
   <p className="world-overview">{detail.overview}</p>
   <section><h3>定义</h3><p>{detail.definition}</p></section>
   <section><h3>核心概念</h3><ul>{detail.coreConcepts.map(x=><li key={x}>{x}</li>)}</ul></section>
@@ -85,6 +89,7 @@ function WorldDrawer({detail,status,toasts,onDismiss,onClose,onNavigate,onUnlock
 
 export default function FunctionWorld(){
  const flow=useReactFlow();
+ const miniMap=miniMapPalette(usePreferences(state=>state.theme));
  const [progress,setProgress]=useState<WorldProgress>(()=>{try{return parseWorldProgress(localStorage.getItem(worldProgressStorageKey));}catch{return emptyWorldProgress();}});
  const progressRef=useRef(progress),clickAudioRef=useRef<HTMLAudioElement|null>(null),completeAudioRef=useRef<HTMLAudioElement|null>(null),toastCounter=useRef(0);
  const [storageError,setStorageError]=useState(false),[showWeak,setShowWeak]=useState(false);
@@ -115,6 +120,7 @@ export default function FunctionWorld(){
  useEffect(()=>{const timer=window.setTimeout(()=>{const module=activeModuleRef.current,id=focusedIdRef.current,p=id?positions[id]:null;const mobile=window.matchMedia('(max-width:900px)').matches;if(mobile){const first=module?(worldModuleIds.get(module)??[])[0]:worldGraph.nodes.find(node=>statuses[node.id]==='available')?.id??worldGraph.nodes[0]?.id;const target=(id&&positions[id])||(first&&positions[first]);if(target)void flow.setCenter(target.x+50,target.y+50,{zoom:1,duration:0});return;}if(module)void flow.fitView({nodes:(worldModuleIds.get(module)??[]).map(nodeId=>({id:nodeId})),padding:.35,duration:0});else if(p)void flow.setCenter(p.x+50,p.y+50,{zoom:1.08,duration:0});else void flow.fitView({padding:.18,duration:0});},80);return()=>window.clearTimeout(timer);},[positions,flow,graphSize.width,graphSize.height]);
 
  const commit=useCallback((next:WorldProgress)=>{progressRef.current=next;setProgress(next);},[]);
+ useEffect(()=>{const refresh=(event:Event)=>{if(!(event as CustomEvent<{keys:string[]}>).detail?.keys.includes(worldProgressStorageKey))return;let next:WorldProgress;try{next=parseWorldProgress(localStorage.getItem(worldProgressStorageKey));}catch{next=emptyWorldProgress();}commit(next);setPathQuery(null);};window.addEventListener('kw:progress-reset',refresh);return()=>window.removeEventListener('kw:progress-reset',refresh);},[commit]);
  const scheduleFeedback=useCallback((callback:()=>void,duration:number)=>{const timer=window.setTimeout(()=>{feedbackTimers.current.delete(timer);callback();},duration);feedbackTimers.current.add(timer);},[]);
  const addToast=useCallback((text:string,key=false,nodeId?:string)=>{const id=++toastCounter.current;setToasts(v=>[...v,{id,text,key,nodeId}].slice(-3));},[]);
  const markTransient=useCallback((targetId:string|null,ancestorIds:readonly string[],wakeIds:readonly string[])=>{const token=++feedbackCounter.current;setTransient({token,targetId,ancestorIds,wakeIds});scheduleFeedback(()=>setTransient(v=>v.token===token?noTransient:v),1250);},[scheduleFeedback]);
@@ -133,8 +139,8 @@ export default function FunctionWorld(){
  const edges=useMemo<FlowEdge[]>(()=>worldGraph.edges.filter(e=>showWeak||e.dependencyType==='strong').map(e=>{const weak=e.dependencyType==='weak',completed=unlocked.has(e.sourceNodeId),highlight=hoveredId?e.sourceNodeId===hoveredId||e.targetNodeId===hoveredId:pathResult?pathEdgeIds.has(e.id):false;const dim=hoveredId?!highlight:pathResult?!highlight:activeModule?worldNodes.get(e.sourceNodeId)?.module!==activeModule&&worldNodes.get(e.targetNodeId)?.module!==activeModule:false;return {id:e.id,type:'world',source:e.sourceNodeId,target:e.targetNodeId,markerEnd:{type:MarkerType.ArrowClosed,color:weak?'#7e97a5':completed?'#62cb91':'#82938a'},data:{weak,completed,dim,highlight,energy:!weak&&transient.targetId===e.sourceNodeId&&transient.wakeIds.includes(e.targetNodeId)} satisfies EdgeData};}),[showWeak,unlocked,hoveredId,pathResult,pathEdgeIds,activeModule,transient]);
  const focusedName=focusedId?worldNodes.get(focusedId)?.canonicalName:null;
  return <div className="function-world" onClickCapture={playClickSound} data-feedback-token={transient.token} data-feedback-active={!!transient.targetId}>
-  <header className="world-header"><div><KnowledgeWorldBrand compact href="/function-world"/><a className="world-back" href="/">← Phase 1 Legacy</a><h1>函数 · Function Knowledge World</h1><p>按知识关系探索函数，从基础走向应用。</p></div><div className="world-header-actions"><div className="world-global-progress" aria-label={`函数知识世界进度 ${counts.unlocked} / ${counts.total}`}><strong>{counts.unlocked} / {counts.total}</strong><span>{counts.percentage}% 已掌握</span><div className="world-progress-track"><i style={{width:`${counts.percentage}%`}}/></div></div></div></header>
-  <aside className="world-wiki-nav" aria-label="知识世界导航"><KnowledgeWorldBrand href="/function-world"/><section><h2>导航</h2><button onClick={()=>moduleFocus(null)}>知识图谱总览</button><a href="#world-search-input">搜索知识</a><a href="#world-progress-panel">学习进度</a></section><section><h2>知识模块</h2>{counts.modules.map(m=><button key={m.id} aria-pressed={activeModule===m.id} onClick={()=>moduleFocus(m.id)}>{m.label}<small>{m.unlocked}/{m.total}</small></button>)}</section><section><h2>知识工具</h2><button onClick={()=>void flow.fitView({padding:.18,duration:300})}>显示全图</button><button disabled={!focusedId} onClick={()=>focusedId&&flyTo(focusedId)}>定位当前知识</button><button disabled={!focusedId} onClick={()=>focusedId&&setSelectedId(focusedId)}>打开知识详情</button></section></aside>
+  <header className="world-header"><div><MinetoastBrand compact href="/"/><a className="world-back" href="/">← 返回 Minetoast</a><h1>函数 · Minetoast</h1><p>按知识关系探索函数，从基础走向应用。</p></div><div className="world-header-actions"><div className="world-global-progress" aria-label={`函数知识世界进度 ${counts.unlocked} / ${counts.total}`}><strong>{counts.unlocked} / {counts.total}</strong><span>{counts.percentage}% 已掌握</span><div className="world-progress-track"><i style={{width:`${counts.percentage}%`}}/></div></div></div></header>
+  <aside className="world-wiki-nav" aria-label="知识世界导航"><MinetoastBrand href="/function-world"/><section><h2>导航</h2><button onClick={()=>moduleFocus(null)}>知识图谱总览</button><a href="#world-search-input">搜索知识</a><a href="#world-progress-panel">学习进度</a></section><section><h2>知识模块</h2>{counts.modules.map(m=><button key={m.id} aria-pressed={activeModule===m.id} onClick={()=>moduleFocus(m.id)}>{m.label}<small>{m.unlocked}/{m.total}</small></button>)}</section><section><h2>知识工具</h2><button onClick={()=>void flow.fitView({padding:.18,duration:300})}>显示全图</button><button disabled={!focusedId} onClick={()=>focusedId&&flyTo(focusedId)}>定位当前知识</button><button disabled={!focusedId} onClick={()=>focusedId&&setSelectedId(focusedId)}>打开知识详情</button></section></aside>
   <div className="world-wiki-content">
   {!progress.initialized&&<section className="world-init" aria-label="快速建立我的知识进度"><div><strong>快速建立我的知识进度</strong><p>点击已经掌握的目标节点，系统只补齐它的 Strong 前置与目标；可以连续选择。Weak 与旁支不会自动点亮。</p></div><button className="world-primary" onClick={()=>{commit(finishWorldInitialization(progressRef.current));addToast('我的数学知识地图已生成');}}>生成我的数学知识地图</button></section>}
   {storageError&&<p className="world-storage-warning" role="alert">浏览器无法保存本机进度；当前操作仅在此页面有效。</p>}
@@ -146,7 +152,7 @@ export default function FunctionWorld(){
     <ReactFlow zoomOnScroll={false} nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} edgesFocusable={false} minZoom={.04} maxZoom={1.8} onNodeClick={onNodeClick} onNodeMouseEnter={(_,node)=>setHoveredId(node.id)} onNodeMouseLeave={()=>setHoveredId(null)} fitViewOptions={{padding:.18}} proOptions={{hideAttribution:false}}>
      <Background color="#505461" gap={32} size={1}/>
      <MotionControls/>
-     <MiniMap position="top-right" pannable zoomable nodeColor={n=>n.data.status==='unlocked'?'#40aa75':n.data.status==='available'?'#d9b563':'#68717e'} maskColor="rgba(32,35,44,.65)"/>
+     <MiniMap position="top-right" pannable zoomable bgColor={miniMap.background} nodeColor={n=>miniMap.nodes[n.data.status as NodeStatus]} maskColor={miniMap.mask}/>
      <WorldHoverCard nodeId={hoveredId} positions={positions} statuses={statuses} initializing={!progress.initialized} size={graphSize}/>
     </ReactFlow>
     <div className="world-legend"><span className="legend-mark legend-locked"/>未解锁<span className="legend-mark legend-available"/>可解锁<span className="legend-mark legend-unlocked"/>已掌握<span className="legend-mark legend-key"/>关键成就</div>

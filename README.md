@@ -1,6 +1,6 @@
 # Minetoast
 
-高中数学知识世界（Minetoast）是一个以知识关系为核心的交互式学习地图。它把知识点、强前置关系、弱关联、教材证据和学习进度放在同一张可探索的图谱中，让学习者从“我现在在哪里”继续到“下一步学什么”。
+Minetoast 是一个以知识关系为核心的高中数学交互式学习地图。它把知识点、强前置关系、弱关联、教材证据和学习进度放在同一张可探索的图谱中，让学习者从“我现在在哪里”继续到“下一步学什么”。
 
 项目主页：<https://minetoast.studyoo.space>
 
@@ -23,9 +23,9 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-打开 <http://localhost:4173>。本地开发默认使用 PGlite，数据保存在 `.data/knowledge-world`，适合预览和测试。
+打开 <http://localhost:4173>。本地开发默认使用 PGlite，数据保存在 `.data/knowledge-world`，适合预览和测试。该目录保持原路径，以保留现有本地数据。
 
-macOS 也可以双击项目根目录的 [`启动 Knowledge World.command`](启动%20Knowledge%20World.command) 启动本地服务。
+macOS 也可以双击项目根目录的 [`启动 Minetoast.command`](启动%20Minetoast.command) 启动本地服务。
 
 ### 使用 PostgreSQL
 
@@ -78,6 +78,19 @@ docs/                     架构、运行、验收和内容审核记录
 - [`apps/web/src/CurriculumSystemWorld.tsx`](apps/web/src/CurriculumSystemWorld.tsx)：专题知识世界通用页面。
 - [`packages/graph-core/src/index.ts`](packages/graph-core/src/index.ts)：Strong / Weak 关系和图算法。
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)：系统架构说明。
+
+## Knowledge Ponder V1
+
+知识详情中的「按下开始思索」进入接近全屏的原理演示。当前包含 19 个场景：原有 8 个，以及用户批准的首批 11 个，覆盖空间平行与夹角、正弦图象与参数、变化率、导数单调性、极大值、极小值和向量数量积。统一使用声明式 DSL 和受限数学运行时。观看进度与知识解锁/掌握完全独立。
+
+页面右下角及思索控制栏的「设置」打开 Minecraft 风格选项：日间/夜间模式、舒适阅读、思索线条颜色、可撤销的分体系本机节点重置、观看记录重置，以及现有账户服务的注册/登录/退出。偏好保存在当前浏览器；账户不会自动同步课程体系本机进度。验收证据与正式发布边界见 `docs/ponder/PONDER-SETTINGS-AND-BATCH-ONE-REPORT.md`。
+
+```bash
+pnpm ponder:validate  # 结构与数学冒烟校验
+pnpm ponder:gate      # 严格发布门禁，缺少审核时退出码 1
+```
+
+演示目前为本地试运行，全部保留 `REVIEW_REQUIRED`。按用户要求取消产品 AI 生成与 AI 审核；场景由人工编排并独立审查。生产发布与云端观看进度不在本地播放器交付范围。详见 [`docs/ponder/PONDER-PILOT-REPORT.md`](docs/ponder/PONDER-PILOT-REPORT.md)。
 
 ## 数据与审核边界
 

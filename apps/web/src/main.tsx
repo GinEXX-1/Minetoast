@@ -1,4 +1,6 @@
-import {PageMotion,MotionControls} from './KnowledgeMotion';
+import {PageMotion as OriginalPageMotion,MotionControls} from './KnowledgeMotion';
+import Settings from './settings/Settings';
+import './settings/day-mode.css';
 import React,{useState,useEffect,useMemo,useRef,useCallback,memo,lazy,Suspense} from 'react';
 import {createRoot} from 'react-dom/client';
 import {QueryClient,QueryClientProvider,useQuery,useQueryClient} from '@tanstack/react-query';
@@ -11,8 +13,10 @@ import '@xyflow/react/dist/style.css';
 import './style.css';
 import './extensions.css';
 import {KnowledgePortal,KnowledgeSystemPage} from './KnowledgePortal';
+import {MinetoastBrand} from './MinetoastBrand';
 import {startLayout} from './workers/layout';
 import {applyLayoutOverrides} from '../../../packages/graph-core/src/layout';
+function PageMotion(){return <><OriginalPageMotion/><Settings/></>;}
 interface Snapshot{releaseId:string;nodes:KnowledgeNode[];edges:KnowledgeEdge[];notice:string;domains?:{id:string;nameZh:string}[];layouts?:{nodeId:string;x:number;y:number;layoutVersion:string}[];landmarks?:{id:string;nodeId:string;x:number;y:number}[];}
 interface Auth{user:{id:string;username:string;role?:string}|null;csrfToken:string|null;}
 interface Progress{revision:number;graphReleaseId:string;initializationCompletedAt:string|null;unlocked:{nodeId:string;source:string}[];}
@@ -43,6 +47,7 @@ function App(){
  const {weak,selected,setWeak,select}=useView();
  const graphQuery=useQuery({queryKey:['graph'],queryFn:()=>api<Snapshot>('/knowledge/graph')});
  const authQuery=useQuery({queryKey:['auth'],queryFn:()=>api<Auth>('/auth/me'),retry:false});
+ useEffect(()=>{const refresh=()=>{qc.removeQueries({queryKey:['progress']});void qc.invalidateQueries({queryKey:['auth']});};window.addEventListener('kw:account-change',refresh);return()=>window.removeEventListener('kw:account-change',refresh);},[qc]);
  const auth=authQuery.data;const userId=auth?.user?.id;
  const progressQuery=useQuery({queryKey:['progress',userId],queryFn:()=>api<Progress>('/me/progress'),enabled:!!userId,retry:false,refetchOnWindowFocus:true});
  const graph=graphQuery.data,progress=progressQuery.data;
@@ -109,7 +114,7 @@ function App(){
  const high=graph?.nodes.filter(n=>n.stage==='high_school'&&!n.retired)??[],completed=high.filter(n=>unlocked.has(n.id)).length;
  const loadError=graphQuery.error||authQuery.error;
  return <div className="app-shell">
-  <header><div className="brand"><span className="brand-mark">◇</span><div><h1>数学 · Knowledge World</h1><p>函数领域 <span>Phase 1 · 20 个测试节点</span></p></div></div><div className="account"><a className="world-entry" href="/function-world">进入函数知识世界 →</a>{auth?.user?<><span>{auth.user.username}</span><button disabled={busy||hasPending} onClick={logout}>退出登录</button></>:<><span>游客浏览</span><button className="primary" disabled={busy} onClick={()=>{setRegister(false);setAuthOpen(true);}}>登录 / 注册</button></>}</div></header>
+  <header><div className="brand"><MinetoastBrand compact className="legacy-minetoast-brand"/><div><h1>Minetoast</h1><p>函数领域 <span>Phase 1 · 20 个测试节点</span></p></div></div><div className="account"><a className="legacy-back" href="/">← 返回 Minetoast</a><a className="world-entry" href="/function-world">进入函数知识世界 →</a>{auth?.user?<><span>{auth.user.username}</span><button disabled={busy||hasPending} onClick={logout}>退出登录</button></>:<><span>游客浏览</span><button className="primary" disabled={busy} onClick={()=>{setRegister(false);setAuthOpen(true);}}>登录 / 注册</button></>}</div></header>
   <section className="toolbar" aria-label="画布操作"><div className="locator"><label htmlFor="locate-node">定位知识</label><select id="locate-node" value={locate} onChange={e=>setLocate(e.target.value)}><option value="">选择节点</option>{graph?.nodes.filter(n=>!n.retired).map(n=><option key={n.id} value={n.id}>{n.nameZh}</option>)}</select><button onClick={fly} disabled={!locate||!positions[locate]}>Fly-to</button><button onClick={()=>{if(locate)select(locate);}} disabled={!locate}>查看详情</button></div><div className="canvas-tools"><label className="switch"><input type="checkbox" checked={weak} onChange={e=>setWeak(e.target.checked)}/>显示 Weak 弱依赖</label><button onClick={()=>flow.fitView({padding:0.12,duration:reduced()?0:350})}>Fit View</button><button aria-pressed={feedback.muted} onClick={feedback.toggle}>{feedback.muted?'声音已关闭':'声音已开启'}</button></div></section>
   <section className="toolbar extended-tools"><label>领域<select value={domain} onChange={e=>{exitPath();setDomain(e.target.value);}}>{(graph?.domains??[{id:'functions',nameZh:'函数'}]).map(d=><option key={d.id} value={d.id}>{d.nameZh}</option>)}</select></label><button aria-pressed={view==='tree'} onClick={()=>setView('tree')}>知识树</button><button aria-pressed={view==='map'} onClick={()=>setView('map')}>区域地图</button><label>搜索<input aria-label="搜索知识或数学符号" value={search} onChange={e=>setSearch(e.target.value)} placeholder="名称 / 拼音 / 别名 / 符号" maxLength={100}/></label>{search&&<div className="search-results" aria-label="搜索结果">{results.length?results.slice(0,8).map(n=><button key={n.id} onClick={()=>{setLocate(n.id);select(n.id);}}>{n.nameZh}</button>):<span>没有匹配节点</span>}</div>}<label>路径<select aria-label="路径模式" value={pathMode} onChange={e=>setPathMode(e.target.value as typeof pathMode)}><option value="to">To · 所有强前置</option><option value="from">From · 所有强后继</option><option value="between">Between · 两点之间</option></select></label>{pathMode==='between'&&<select aria-label="路径终点" value={pathTarget} onChange={e=>setPathTarget(e.target.value)}><option value="">选择终点</option>{graph?.nodes.filter(n=>!n.retired).map(n=><option key={n.id} value={n.id}>{n.nameZh}</option>)}</select>}<button disabled={!locate||(pathMode==='between'&&!pathTarget)} onClick={showPath}>显示路径</button>{path&&<><button onClick={()=>flow.fitView({padding:.15,duration:0})}>Fit Path</button><button onClick={exitPath}>退出路径</button><span role="status">{pathResult?.reachable?`${pathResult.nodeIds.length} 个路径节点`:'无可达强依赖路径'}</span></>}{auth?.user?.role==='admin'&&auth.csrfToken&&graph&&<AdminPanel api={api} csrf={auth.csrfToken} releaseId={graph.releaseId} onPublish={()=>{void graphQuery.refetch();void progressQuery.refetch();}}/>}</section>
   {!!portals.length&&<nav aria-label="跨域入口">{portals.map(p=><button key={p.id} data-testid={p.id} onClick={()=>{setDomain(p.targetDomainId);setLocate(p.targetNodeId);}}>{index?.nodesById.get(p.targetNodeId)?.nameZh} → {p.targetDomainId}</button>)}</nav>}

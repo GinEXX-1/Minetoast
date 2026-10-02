@@ -1,0 +1,30 @@
+import {test,expect} from '@playwright/test';
+import {openGeometry} from './ponder-helpers';
+import {resolve} from 'node:path';
+const evidence=resolve('docs/ponder/evidence');
+test('reduced-motion mode is static until explicit opt-in, then WebGL animates and pauses',async({page})=>{
+ await page.setViewportSize({width:1163,height:905});await page.emulateMedia({reducedMotion:'reduce'});
+ await openGeometry(page,'线面垂直判定定理');
+ const canvas=page.getByTestId('ponder-webgl-canvas');await expect(canvas).toBeVisible();
+ await expect(page.getByRole('checkbox',{name:'启用动画'})).not.toBeChecked();
+ await expect(page.locator('.ponder-stage-badge')).toContainText('静态模式');
+ const settled=await canvas.getAttribute('data-elapsed');await page.waitForTimeout(200);expect(await canvas.getAttribute('data-elapsed')).toBe(settled);
+ await page.getByRole('button',{name:'播放动画',exact:true}).click();await expect(page.getByRole('checkbox',{name:'启用动画'})).toBeChecked();
+ const initial=await canvas.getAttribute('data-camera');await expect.poll(()=>canvas.getAttribute('data-camera')).not.toBe(initial);
+ await expect.poll(async()=>Number(await canvas.getAttribute('data-elapsed'))).toBeGreaterThan(.5);
+ await page.getByRole('button',{name:'暂停',exact:true}).click();const paused=await canvas.getAttribute('data-elapsed'),image=await canvas.screenshot();await page.waitForTimeout(150);expect(await canvas.getAttribute('data-elapsed')).toBe(paused);expect((await canvas.screenshot()).equals(image)).toBe(true);
+ expect(await page.evaluate(()=>matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
+ await page.getByRole('checkbox',{name:'启用动画'}).uncheck();await page.getByRole('button',{name:'下一步',exact:true}).click();await expect(page.locator('.ponder-stage-badge')).toContainText('静态模式');
+ const second=await canvas.getAttribute('data-elapsed');await page.waitForTimeout(150);expect(await canvas.getAttribute('data-elapsed')).toBe(second);
+ await page.getByRole('button',{name:'重播本步'}).click();await expect(page.getByRole('button',{name:'暂停',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'暂停',exact:true}).click();await page.screenshot({path:resolve(evidence,'motion-opt-in-1163.png')});
+ await page.getByRole('checkbox',{name:'启用动画'}).uncheck();for(let i=0;i<3;i++)await page.getByRole('button',{name:'下一步',exact:true}).click();
+ await page.getByRole('button',{name:'继续思索',exact:true}).click();await expect(page.getByRole('status').filter({hasText:'已观看原理演示'})).toBeVisible();
+});
+for(const width of [1440,1163,390])test(`drawer entry retains padding and button containment at ${width}px`,async({page})=>{
+ await page.setViewportSize({width,height:905});await openGeometry(page,'线面垂直判定定理');await page.getByRole('button',{name:'退出思索'}).click();
+ const entry=page.locator('.ponder-entry');await expect(entry).toBeVisible();
+ const box=await entry.evaluate(el=>{const s=getComputedStyle(el),b=el.querySelector('button')!,a=el.getBoundingClientRect(),r=b.getBoundingClientRect();return {padding:parseFloat(s.paddingLeft),rightPadding:a.right-r.right,leftPadding:r.left-a.left,background:getComputedStyle(b).backgroundColor};});
+ expect(box.padding).toBeGreaterThanOrEqual(18);expect(box.leftPadding).toBeGreaterThanOrEqual(18);expect(box.rightPadding).toBeGreaterThanOrEqual(18);expect(box.background).toBe('rgb(82, 98, 66)');
+ await page.screenshot({path:resolve(evidence,`entry-fixed-${width}.png`)});
+});

@@ -1,0 +1,39 @@
+import {useId,useRef,useEffect,useState} from 'react';
+import {lineColors,usePreferences} from '../settings/preferences';
+import type {RendererProps} from './types';
+/** Mathematical coordinates use a uniform scale; circles and slopes retain their geometry. */
+export default function CoordinateRenderer({model,parameters,step,interactive,onParameter,frame}:RendererProps){
+ const preferences=usePreferences(),palette=lineColors(model.scene.renderer,preferences);
+ const {scene}=model,clip=useId().replace(/:/g,''),svg=useRef<SVGSVGElement>(null);
+ const [xmin,xmax]=scene.scene.xRange,[ymin,ymax]=scene.scene.yRange;
+ const [size,setSize]=useState({width:800,height:500});
+ useEffect(()=>{const element=svg.current!,observer=new ResizeObserver(()=>{if(element.clientWidth&&element.clientHeight)setSize({width:element.clientWidth,height:element.clientHeight});});observer.observe(element);return()=>observer.disconnect();},[]);
+ const {width,height}=size,pad=width<500?32:52,scale=Math.min((width-2*pad)/(xmax-xmin),(height-2*pad)/(ymax-ymin));
+ const left=(width-(xmax-xmin)*scale)/2,top=(height-(ymax-ymin)*scale)/2;
+ const sx=(x:number)=>left+(x-xmin)*scale,sy=(y:number)=>top+(ymax-y)*scale;
+ const shown=new Set(step.show),highlight=new Set(step.highlight);
+ const drag=useRef<{key:string;kind:'x'|'angle'}|null>(null);
+ const move=(event:React.PointerEvent<SVGSVGElement>)=>{
+  if(!drag.current||!svg.current)return;const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.current.getScreenCTM()!.inverse()),x=(point.x-left)/scale+xmin,y=ymax-(point.y-top)/scale;
+  onParameter(drag.current.key,drag.current.kind==='angle'?Math.atan2(y,x):x);
+ };
+ const ticks=(min:number,max:number)=>Array.from({length:Math.min(30,Math.ceil(max)-Math.floor(min)+1)},(_,i)=>Math.floor(min)+i).filter(x=>x>=min&&x<=max);
+ return <svg ref={svg} className="ponder-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={step.semanticLabel} data-testid={`ponder-${scene.renderer}-renderer`} data-elapsed={frame.elapsed.toFixed(3)} onPointerMove={move} onPointerUp={event=>{drag.current=null;if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);}} onPointerCancel={()=>{drag.current=null;}}>
+  <title>{step.title}</title><desc>{step.semanticLabel}</desc><defs><clipPath id={clip}><rect x={8} y={8} width={width-16} height={height-16}/></clipPath></defs>
+  {(scene.renderer==='coordinate'||scene.scene.axes)&&<g className="ponder-axes" opacity={Math.min(1,.3+frame.elapsed*.7)}>{ticks(xmin,xmax).map(x=><g key={`x${x}`}><line x1={sx(x)} y1={sy(ymin)} x2={sx(x)} y2={sy(ymax)} stroke="#293746"/><text x={sx(x)} y={sy(0)+22} textAnchor="middle">{x}</text></g>)}{ticks(ymin,ymax).map(y=><g key={`y${y}`}><line x1={sx(xmin)} y1={sy(y)} x2={sx(xmax)} y2={sy(y)} stroke="#293746"/>{y!==0&&<text x={sx(0)-12} y={sy(y)+5} textAnchor="end">{y}</text>}</g>)}<line x1={sx(xmin)} y1={sy(0)} x2={sx(xmax)} y2={sy(0)} stroke="#8c9cae"/><line x1={sx(0)} y1={sy(ymin)} x2={sx(0)} y2={sy(ymax)} stroke="#8c9cae"/><text x={sx(xmax)-10} y={sy(0)-12}>x</text><text x={sx(0)+10} y={sy(ymax)+15}>y</text></g>}
+  <defs>{Object.entries(palette).map(([key,color])=><marker key={key} id={`${clip}-${key}`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill={color}/></marker>)}</defs>
+  <g clipPath={`url(#${clip})`}>{scene.objects.filter(o=>shown.has(o.id)).map(o=>{
+   const motion=frame.objects[o.id],color=palette[o.color],strokeWidth=(highlight.has(o.id)?4:2.6)+motion.emphasis*1.5,props={opacity:motion.reveal,stroke:color,strokeWidth,pathLength:1,strokeDasharray:motion.draw<1?'1':undefined,strokeDashoffset:1-motion.draw,fill:'none','data-object':o.id};
+   switch(o.kind){
+    case 'plot':{const end=o.end?Math.max(o.domain[0],Math.min(o.domain[1],model.value(o.end,parameters))):o.domain[1];let path='',pen=false;for(let i=0;i<=Math.floor(240*motion.draw);i++){const x=o.domain[0]+(end-o.domain[0])*i/240;try{const y=model.value(o.expression,parameters,{x});path+=`${pen?'L':'M'}${sx(x)},${sy(y)} `;pen=true;}catch{pen=false;}}const x=o.domain[0]+(end-o.domain[0])*motion.draw;let endpoint:null|[number,number]=null;try{endpoint=[sx(x),sy(model.value(o.expression,parameters,{x}))];}catch{/* Undefined samples retain a gap. */}return <g key={o.id}><path {...props} strokeDasharray={undefined} strokeDashoffset={0} d={path}/>{endpoint&&motion.draw===1&&!o.end&&<text x={endpoint[0]+12} y={endpoint[1]-12} fill={color}>{o.label}</text>}{motion.draw>0&&(motion.draw<1||o.end)&&endpoint&&<circle cx={endpoint[0]} cy={endpoint[1]} r={5} fill={color}/>}</g>;}
+    case 'point':{const [x,y]=model.v2(o.at,parameters),enabled=interactive&&!!o.draggable&&step.interaction.includes(o.draggable);return <g key={o.id} data-object={o.id} opacity={motion.reveal}><circle cx={sx(x)} cy={sy(y)} r={(enabled?9:6)*(1+motion.emphasis*.2)} fill={color} stroke="#10202a" strokeWidth={2}/>{enabled&&<circle cx={sx(x)} cy={sy(y)} r={22} fill="transparent" className="ponder-drag-handle" onPointerDown={e=>{e.preventDefault();drag.current={key:o.draggable!,kind:scene.renderer==='geometry'?'angle':'x'};svg.current?.setPointerCapture(e.pointerId);onParameter(o.draggable!,parameters[o.draggable!]);}}/>}<text x={sx(x)+12} y={sy(y)-14} fill={color}>{o.label}</text></g>;}
+    case 'segment':{const a=model.v2(o.from,parameters),b=model.v2(o.to,parameters);return <line key={o.id} {...props} markerEnd={o.arrow?`url(#${clip}-${o.color})`:undefined} x1={sx(a[0])} y1={sy(a[1])} strokeDasharray={o.dashed?'0.015 0.02':undefined} strokeDashoffset={0} x2={sx(a[0]+(b[0]-a[0])*motion.draw)} y2={sy(a[1]+(b[1]-a[1])*motion.draw)}/>;}
+    case 'circle':{const [x,y]=model.v2(o.center,parameters),r=model.value(o.radius,parameters);return <circle key={o.id} {...props} cx={sx(x)} cy={sy(y)} r={r*scale}/>;}
+    case 'line':{const [x,y]=model.v2(o.through,parameters),[dx,dy]=model.v2(o.direction,parameters),norm=Math.hypot(dx,dy),extent=Math.max(xmax-xmin,ymax-ymin)*2*motion.draw;return <line key={o.id} {...props} strokeDasharray={undefined} strokeDashoffset={0} x1={sx(x-dx/norm*extent)} y1={sy(y-dy/norm*extent)} x2={sx(x+dx/norm*extent)} y2={sy(y+dy/norm*extent)}/>;}
+    case 'intersections':return <g key={o.id} data-object={o.id} opacity={motion.reveal}>{model.intersections(o,parameters).map(([x,y],i)=><circle key={i} cx={sx(x)} cy={sy(y)} r={5+motion.emphasis*2} fill={color}/>)}</g>;
+    case 'angleMarker':{const origin=model.v2(o.origin,parameters),a=model.v2(o.first,parameters),b=model.v2(o.second,parameters),na=Math.hypot(...a),nb=Math.hypot(...b),u=a.map(x=>x/na*.2),v=b.map(x=>x/nb*.2);return <path key={o.id} {...props} d={`M${sx(origin[0]+u[0])},${sy(origin[1]+u[1])} L${sx(origin[0]+u[0]+v[0])},${sy(origin[1]+u[1]+v[1])} L${sx(origin[0]+v[0])},${sy(origin[1]+v[1])}`}/>;}
+    default:return null;
+   }
+  })}</g>
+ </svg>;
+}

@@ -1,7 +1,7 @@
 import {expect,test} from '@playwright/test';
 
-test.describe('Phase 2D Function Knowledge World',()=>{
- test.beforeEach(async({page})=>{await page.goto('/function-world');await expect(page.getByRole('heading',{name:'函数 · Function Knowledge World'})).toBeVisible();});
+test.describe('Phase 2D Minetoast Function World',()=>{
+ test.beforeEach(async({page})=>{await page.goto('/function-world');await expect(page.getByRole('heading',{name:'函数 · Minetoast'})).toBeVisible();});
 
  test('keeps the legacy entry and renders the frozen graph with search and details',async({page})=>{
   await expect(page.locator('.world-card')).toHaveCount(32);

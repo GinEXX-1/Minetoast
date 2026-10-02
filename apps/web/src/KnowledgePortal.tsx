@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import brand from './assets/brand/knowledge-world-1280.png';
+import {MinetoastBrand} from './MinetoastBrand';
 import CurriculumSystemWorld from './CurriculumSystemWorld';
 import {trigonometrySeed} from '../../../content/fixtures/trigonometry-system';
 import {sequencesSeed} from '../../../content/fixtures/sequences-system';
@@ -12,6 +12,7 @@ import {calculusSeed} from '../../../content/fixtures/calculus-system';
 import {worldGraph} from './function-world-model';
 import {createCurriculumAudioController} from './curriculum-audio';
 import {CurriculumPixelIcon} from './CurriculumPixelIcon';
+import {openSettings} from './settings/preferences';
 import './knowledge-portal.css';
 import './portal-mobile.css';
 
@@ -88,8 +89,8 @@ export function KnowledgePortal() {
 
   return <main className="knowledge-portal" onClickCapture={audio.playClick}>
     <header className="portal-header">
-      <a className="portal-brand" href="/" aria-label="Knowledge World 首页"><span className="portal-brand-image"><img src={brand} alt="Knowledge World"/></span><span>高中数学</span></a>
-      <div className="portal-title"><span>学习总览 / KNOWLEDGE ATLAS</span><h1>数学 · Knowledge World</h1><p>从知识关系出发，找到每个体系的学习路径。</p></div>
+      <MinetoastBrand className="portal-brand"/>
+      <div className="portal-title"><span>学习总览 / KNOWLEDGE ATLAS</span><h1>数学 · Minetoast</h1><p>从知识关系出发，找到每个体系的学习路径。</p></div>
       <div className="portal-header-actions"><span className="visitor-label">本地浏览</span></div>
     </header>
 
@@ -98,6 +99,7 @@ export function KnowledgePortal() {
         <div className="portal-rail-heading">导航</div>
         <a className="active" href="#systems">知识体系</a>
         <a href="#about">项目说明</a>
+        <button className="portal-settings-entry" type="button" onClick={openSettings}>设置</button>
         <div className="portal-rail-heading portal-rail-domains">体系索引 <span>09</span></div>
         <nav>{systems.map(s => <a href={s.status === 'live' ? '/function-world' : `/systems/${s.id}`} key={s.id}><i className={s.reviewStatus === 'approved' ? 'dot live' : 'dot'} />{s.name}</a>)}</nav>
         <div className="portal-rail-note"><b>审核状态</b><span>通过审核 {approvedSystemCount}/{systemCount} · 正式节点 {formalNodeCount} · 候选节点 {candidateNodeCount}</span></div>
@@ -126,7 +128,7 @@ export function KnowledgePortal() {
         </div>
 
         <section className="portal-note" id="about"><span className="portal-note-icon"><CurriculumPixelIcon systemId="geometry" width={24} height={24}/></span><p><b>体系审核状态</b><br/>{approvedSystemCount} 个知识体系均已通过审核；其中函数体系的 {formalNodeCount} 个节点已正式接入，其他专题的 {candidateNodeCount} 个节点保留候选标识并可在独立页面学习。</p></section>
-        <footer className="portal-footer"><span>KNOWLEDGE WORLD · HIGH SCHOOL MATHEMATICS</span><span>图谱数据按正式发布版本统计</span></footer>
+        <footer className="portal-footer"><span>MINETOAST · HIGH SCHOOL MATHEMATICS</span><span>图谱数据按正式发布版本统计</span></footer>
       </section>
     </div>
   </main>;

@@ -1,0 +1,105 @@
+html[data-theme=day]{background:#f7f3e8;color:#292f25}
+html[data-theme=day] body,html[data-theme=day] .knowledge-portal,html[data-theme=day] .function-world,html[data-theme=day] .app-shell{background:#f7f3e8;color:#292f25}
+html[data-theme=day] .portal-header,html[data-theme=day] .portal-rail,html[data-theme=day] .portal-content,html[data-theme=day] .portal-overview,html[data-theme=day] .portal-controls,html[data-theme=day] .portal-note,html[data-theme=day] .portal-footer,html[data-theme=day] .world-heading,html[data-theme=day] .world-sidebar,html[data-theme=day] .world-pathbar,html[data-theme=day] .world-toolbar,html[data-theme=day] .world-progress-panel,html[data-theme=day] .world-initialization{background:#eee9db;color:#292f25;border-color:#a99f8a;box-shadow:inset 2px 2px #fff,inset -2px -2px #bcc5b2}
+html[data-theme=day] .portal-card{background:#fff;color:#273725;border-color:#a1ad94;box-shadow:inset 2px 2px #fff,inset -2px -2px #b9c5aa,3px 3px #d0d6c8}
+html[data-theme=day] .portal-card-copy h2,html[data-theme=day] .portal-title,html[data-theme=day] .world-heading h1,html[data-theme=day] .world-sidebar h2,html[data-theme=day] .world-sidebar h3{color:#293228;text-shadow:none}
+html[data-theme=day] .portal-card-copy p,html[data-theme=day] .portal-card-copy span,html[data-theme=day] .portal-rail-note,html[data-theme=day] .portal-kicker,html[data-theme=day] .portal-metrics,html[data-theme=day] .portal-note,html[data-theme=day] .world-side-note,html[data-theme=day] .world-module-progress,html[data-theme=day] .world-heading p{color:#495743}
+html[data-theme=day] .portal-search input,html[data-theme=day] .function-world input,html[data-theme=day] .function-world select{color:#263522;background:#fff;border-color:#8e9e80}
+html[data-theme=day] .portal-filters button,html[data-theme=day] .portal-rail button,html[data-theme=day] .portal-account,html[data-theme=day] .portal-controls button,html[data-theme=day] .function-world button{color:#283923;background:#e8e0cf;border-color:#819171;box-shadow:inset 2px 2px #fff,inset -2px -2px #a7b692;text-shadow:none}
+html[data-theme=day] .portal-filters .active,html[data-theme=day] .function-world button[aria-pressed=true],html[data-theme=day] .world-sidebar h2{background:#bad496;color:#253721}
+html[data-theme=day] .world-graph,html[data-theme=day] .graph-space,html[data-theme=day] .react-flow{background:#fcf8ef}
+html[data-theme=day] .world-node-tooltip,html[data-theme=day] .world-search-results,html[data-theme=day] .world-legend{background:#f4ecdc;color:#293228;border-color:#7d8b70}
+html[data-theme=day] .world-drawer,html[data-theme=day] .detail-drawer{background:#fffaf0;color:#293228;border-color:#a99f8a;box-shadow:inset 3px 3px #fff,inset -3px -3px #c5cdbb}
+html[data-theme=day] .world-drawer h2,html[data-theme=day] .world-drawer h3,html[data-theme=day] .world-drawer h4,html[data-theme=day] .world-overview,html[data-theme=day] .world-drawer p,html[data-theme=day] .world-drawer li{color:#293228;text-shadow:none}
+html[data-theme=day] .world-detail-meta span,html[data-theme=day] .world-reference,html[data-theme=day] .world-relation{background:#eef2e7;color:#334b2c;border-color:#bac4ae}
+html[data-theme=day] .world-drawer .ponder-entry{background:#f2ebdc;color:#273d24;border-color:#a99f8a;box-shadow:inset 2px 2px #fff,inset -2px -2px #b3bda7}
+html[data-theme=day] .world-drawer .ponder-entry p{color:#495743}
+html[data-theme=day] .ponder-focus{background:#f8f2e7;color:#293228;border-color:#68735f;box-shadow:inset 3px 3px #fff,inset -3px -3px #b5bfaa}
+html[data-theme=day] .ponder-hud h2,html[data-theme=day] .ponder-hud span,html[data-theme=day] .ponder-hud .ponder-counter{color:#293d27;text-shadow:none}
+html[data-theme=day] .ponder-theatre{background:#fbf6eb;border-color:#abb5a0;box-shadow:inset 0 0 30px #e3e7da}
+html[data-theme=day] .ponder-caption{background:#fffffaf2;color:#283c23;border-color:#8c9d7a;box-shadow:inset 1px 1px #fff,3px 3px #bdc9ae}
+html[data-theme=day] .ponder-caption>span,html[data-theme=day] .ponder-caption p,html[data-theme=day] .ponder-stage-badge,html[data-theme=day] .ponder-camera-hint,html[data-theme=day] .ponder-live-values,html[data-theme=day] .ponder-measurements,html[data-theme=day] .ponder-measurements strong,html[data-theme=day] .ponder-status,html[data-theme=day] .ponder-transcript{color:#35482e;text-shadow:none}
+html[data-theme=day] .ponder-svg text{stroke:#fbf6eb}html[data-theme=day] .ponder-axes text{fill:#526476}
+html[data-theme=day] .ponder-timeline,html[data-theme=day] .ponder-interaction{background:#e9e2d3;border-color:#8c9d7a}
+html[data-theme=day] .ponder-focus button,html[data-theme=day] .ponder-timeline button{background:#e8e0cf;color:#293d27;text-shadow:none;border-color:#768567;box-shadow:inset 2px 2px #fff,inset -2px -2px #acb89c}
+html[data-theme=day] .ponder-focus .ponder-primary,html[data-theme=day] .ponder-timeline [aria-current=step]{background:#b8cf95}
+html[data-theme=day] .ponder-measurements>div>span,html[data-theme=day] .ponder-measurements small,html[data-theme=day] .ponder-interaction output{color:#485b3d}
+html[data-theme=day] .kw-settings{background:#f7f0e4f5;color:#293d27;text-shadow:none}html[data-theme=day] .kw-settings::backdrop{background:#e5dccbbb}
+html[data-theme=day] .kw-settings-note,html[data-theme=day] .kw-settings-message{color:#405532}html[data-theme=day] .kw-settings-content input,html[data-theme=day] .kw-settings-content select,html[data-theme=day] .kw-color-grid label{background:#fff;color:#293d27;border-color:#879975}
+html[data-theme=day] .portal-title h1,html[data-theme=day] .portal-overview h2,html[data-theme=day] .portal-card-copy strong,html[data-theme=day] .portal-note p b{color:#293228}
+html[data-theme=day] .portal-title p,html[data-theme=day] .portal-title>span,html[data-theme=day] .portal-brand span,html[data-theme=day] .visitor-label,html[data-theme=day] .portal-overview p,html[data-theme=day] .portal-card-copy small,html[data-theme=day] .portal-note p,html[data-theme=day] .portal-rail-note span{color:#495743}
+html[data-theme=day] .portal-metrics,html[data-theme=day] .portal-search,html[data-theme=day] .portal-rail-note,html[data-theme=day] .portal-rail-heading{background:#ebe4d5;color:#293228;border-color:#8b9b7c;box-shadow:inset 2px 2px #fff,inset -2px -2px #bdc7b0}
+html[data-theme=day] .portal-metrics b,html[data-theme=day] .portal-rail-note b,html[data-theme=day] .portal-rail-domains span,html[data-theme=day] .portal-search>span{color:#344a2d}
+html[data-theme=day] .portal-metrics span,html[data-theme=day] .portal-filters button span{color:#495743}
+html[data-theme=day] .portal-search input::placeholder{color:#64745b}html[data-theme=day] .portal-search kbd{color:#405532;background:#eef2e8;border-color:#92a281}
+html[data-theme=day] .portal-filters button.selected,html[data-theme=day] .portal-rail>a.active{background:#bdd79e;color:#263c20;border-color:#698653}
+html[data-theme=day] .portal-filters button.selected span,html[data-theme=day] .portal-rail a,html[data-theme=day] .portal-card-state.ready{color:#386832}
+html[data-theme=day] .portal-rail a:hover{background:#d9e6c9;color:#263c20}html[data-theme=day] .portal-card-arrow,html[data-theme=day] .portal-note>a{color:#386832}
+html[data-theme=day] .world-header,html[data-theme=day] .world-wiki-nav section,html[data-theme=day] .world-wiki-nav h2,html[data-theme=day] .world-init{background:#eee9db;color:#293228;border-color:#879775;box-shadow:inset 2px 2px #fff,inset -2px -2px #bdc7b0}
+html[data-theme=day] .world-header h1,html[data-theme=day] .world-global-progress strong,html[data-theme=day] .world-sidebar-total,html[data-theme=day] .world-init strong{color:#293228}
+html[data-theme=day] .world-header p,html[data-theme=day] .world-global-progress span,html[data-theme=day] .world-modules small,html[data-theme=day] .world-sidebar-total>small,html[data-theme=day] .world-module-progress>div:first-child,html[data-theme=day] .world-module-progress strong,html[data-theme=day] .world-wiki-nav small,html[data-theme=day] .world-init p{color:#495743}
+html[data-theme=day] .world-back,html[data-theme=day] .world-wiki-nav a,html[data-theme=day] .world-wiki-nav button,html[data-theme=day] .world-pathbar>span:first-child{color:#386832}
+html[data-theme=day] .world-formula,html[data-theme=day] .world-example,html[data-theme=day] .world-mistake,html[data-theme=day] .world-drawer .formula{background:#f4ecdd;color:#293228;border-color:#b7aa90}
+html[data-theme=day] .world-formula p,html[data-theme=day] .world-example b,html[data-theme=day] .world-relation small,html[data-theme=day] .world-drawer-note{color:#495743}
+html[data-theme=day] .world-search-results button small{color:#495743}
+html[data-theme=day] .world-drawer .world-evidence-warning{background:#fff2d4;color:#62471d;border-color:#b49b62}
+html[data-theme=day] .world-drawer-head,html[data-theme=day] .world-drawer-head>span{color:#476278}
+html[data-theme=day] .ponder-controls label,html[data-theme=day] .ponder-camera-controls label,html[data-theme=day] .ponder-stage-badge span{color:#495743}
+html[data-theme=day] .app-shell>header,html[data-theme=day] .app-shell .toolbar,html[data-theme=day] .app-shell .progress-strip,html[data-theme=day] .app-shell .initialization,html[data-theme=day] .app-shell>footer{background:#eee9db;color:#293228;border-color:#9dac8c}
+html[data-theme=day] .app-shell header p,html[data-theme=day] .app-shell header p span,html[data-theme=day] .app-shell .progress-strip strong,html[data-theme=day] .app-shell .progress-strip span,html[data-theme=day] .app-shell .initialization strong,html[data-theme=day] .app-shell .initialization span{color:#495743}
+html[data-theme=day] .app-shell button,html[data-theme=day] .app-shell input,html[data-theme=day] .app-shell select{background:#e3ebd8;color:#293228;border-color:#839775}
+html[data-theme=day] .app-shell .knowledge-card{background:#f0f2e9;color:#3e4938;border-color:#859078;box-shadow:3px 3px #b8c1ac}
+html[data-theme=day] .app-shell .knowledge-card.available{background:#f6edcb;border-color:#b49146}html[data-theme=day] .app-shell .knowledge-card.unlocked{background:#d6e8c6;border-color:#568944}
+html[data-theme=day] .app-shell .node-copy small,html[data-theme=day] .app-shell .state-label{color:#495743}html[data-theme=day] .app-shell .canvas-legend,html[data-theme=day] .app-shell .search-results{background:#eee9db;color:#293228}
+html[data-theme=day] .ponder-caption .formula,html[data-theme=day] .ponder-caption .katex,html[data-theme=day] .ponder-formula-reveal{color:#293228;background:transparent}
+html[data-theme=day] .app-shell .world-entry,html[data-theme=day] .app-shell .legacy-back,html[data-theme=day] .app-shell>footer span,html[data-theme=day] .app-shell .react-flow__attribution a{color:#405535}
+
+html[data-theme=day] .app-shell .detail-drawer .conditions,html[data-theme=day] .app-shell .detail-drawer .eyebrow{color:#4c5e49}
+
+/* Day mode uses warm paper surfaces and explicit ink colors for content that
+   otherwise inherits the night palette from the graph and wiki styles. */
+html[data-theme=day] .knowledge-portal,html[data-theme=day] .portal-card{background-image:none}
+html[data-theme=day] .world-search label,html[data-theme=day] .world-search input::placeholder,html[data-theme=day] .world-path-summary,html[data-theme=day] .world-switch label{color:#43513d}
+html[data-theme=day] .world-search input::placeholder{opacity:1}
+html[data-theme=day] .world-node-tooltip small,html[data-theme=day] .world-node-tooltip em,html[data-theme=day] .world-node-tooltip p{color:#43513d}
+html[data-theme=day] .world-search-results button,html[data-theme=day] .world-search-results button small{color:#293228}
+html[data-theme=day] .world-search-results button:hover{background:#e6dcc8}
+html[data-theme=day] .world-modules small,html[data-theme=day] .world-drawer .katex,html[data-theme=day] .world-drawer .formula .katex{color:#293228}
+html[data-theme=day] .world-drawer-head,html[data-theme=day] .world-drawer-head>span,html[data-theme=day] .world-achievement{color:#344c3b}
+html[data-theme=day] .world-drawer-head{background:#fffaf0}
+html[data-theme=day] .world-drawer .world-formula .formula{background:#f4ecdd;color:#293228;border-color:#b7aa90}
+html[data-theme=day] .world-node-tooltip{box-shadow:inset 1px 1px #fff,4px 4px #d4caba}
+html[data-theme=day] .world-graph .react-flow__attribution{background:#e8e0cf!important;color:#293228!important}
+html[data-theme=day] .world-graph .react-flow__attribution a{color:#344c3b!important}
+html[data-theme=day] .kw-settings-note{color:#495743}
+html[data-theme=day] .kw-settings button{background:#ded5c3;color:#293228;border-color:#625c50;box-shadow:inset 3px 3px #fffaf0,inset -3px -3px #aa9e8a;text-shadow:none}
+html[data-theme=day] .kw-settings button:hover{background:#d0c4ad}
+html[data-theme=day] .portal-settings-entry{color:#293228}
+html[data-theme=day] .portal-settings-entry:hover{background:#ded5c3}
+
+/* Knowledge nodes retain the three progress states on the warm graph canvas. */
+html[data-theme=day] .world-graph .kw-frame{--kw-face:#e1d8c8;--kw-rim:#817b6e;--kw-rail:#756f63;--kw-corner:#70695c;--kw-marker:#625f55;color:#293228;border-color:#454a40;box-shadow:inset 0 0 0 4px var(--kw-rim),4px 4px 0 #bdb4a3}
+html[data-theme=day] .world-graph .kw-frame--core{box-shadow:inset 0 0 0 4px var(--kw-rim),inset 0 0 0 8px #c3b7a3,4px 4px 0 #bdb4a3}
+html[data-theme=day] .world-graph .kw-frame--key{box-shadow:inset 0 0 0 4px var(--kw-rim),inset 0 0 0 8px #c3b7a3,inset 0 0 0 12px var(--kw-corner),4px 4px 0 #bdb4a3}
+html[data-theme=day] .world-graph .kw-frame--available{--kw-face:#f1e4bf;--kw-rim:#997632;--kw-rail:#ad873c;--kw-corner:#8b6829;--kw-marker:#775713}
+html[data-theme=day] .world-graph .kw-frame--unlocked{--kw-face:#d6e6d0;--kw-rim:#457953;--kw-rail:#568d65;--kw-corner:#3e704b;--kw-marker:#2c633d}
+html[data-theme=day] .world-card.locked .kw-frame__icon-safe{filter:none}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#b7c8b7"]{fill:#30382f}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#76c3af"]{fill:#75521e}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#e6d8a5"]{fill:#396c49}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#b8d0c0"]{fill:#30382f}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#8ad5a3"]{fill:#396c49}
+html[data-theme=day] .world-graph .kw-frame__icon-safe svg rect[fill="#e8d28b"]{fill:#835b18}
+html[data-theme=day] .world-card-copy{background:#f4ecdc;border-color:#8f836c;box-shadow:4px 4px 0 #c7bda9;color:#293228}
+html[data-theme=day] .world-card-copy small,html[data-theme=day] .world-card-copy em,html[data-theme=day] .world-card-summary{color:#495743}
+html[data-theme=day] .world-graph .react-flow__minimap{background:#e9dfcb;border-color:#817664;box-shadow:inset 0 0 0 1px #fffaf0,4px 4px #c8bca8}
+html[data-theme=day] .world-legend .legend-mark{background:#e1d8c8;border-color:#817b6e}
+html[data-theme=day] .world-legend .legend-available{background:#f1e4bf;border-color:#997632}
+html[data-theme=day] .world-legend .legend-unlocked{background:#d6e6d0;border-color:#457953}
+html[data-theme=day] .world-legend .legend-key{border-color:#997632;box-shadow:2px 2px 0 #bda66f}
+html[data-theme=day] .portal-card-mark{background:#e9e2d3;border-color:#73816e;box-shadow:inset 0 0 0 2px #fffaf0;color:#30382f}
+html[data-theme=day] .portal-card.is-live .portal-card-mark{background:#e1ead9;border-color:#52835c;color:#30382f}
+html[data-theme=day] .portal-card-mark svg rect[fill="#b8d0c0"]{fill:#30382f}
+html[data-theme=day] .portal-card-mark svg rect[fill="#8ad5a3"]{fill:#396c49}
+html[data-theme=day] .portal-card-mark svg rect[fill="#e8d28b"]{fill:#835b18}
+html[data-theme=day] .minetoast-brand small{color:#495743}

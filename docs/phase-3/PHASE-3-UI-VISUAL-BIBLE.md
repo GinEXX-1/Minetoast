@@ -1,4 +1,4 @@
-# Knowledge World — Phase 3 UI Visual Bible
+# Minetoast — Phase 3 UI Visual Bible
 
 状态：`CANONICAL / P3A DESIGN SPEC`  
 版本：1.0；日期：2026-09-26  

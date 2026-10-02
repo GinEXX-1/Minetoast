@@ -30,7 +30,7 @@ export default function FunctionContentPreview(){
  const results=useMemo(()=>query?searchFunctionDetails(query):functionNodeDetails,[query]);
  const detail=selected?functionDetailById.get(selected):undefined;
  return <main className="p2c-preview">
-  <header><div><h1>数学 · Knowledge World</h1><p>Phase 2C · Function Detail Content Preview · 隔离候选数据</p></div><span className="p2c-badge">{functionCandidateGraph.nodes.length} active nodes · 未发布</span></header>
+  <header><div><h1>Minetoast</h1><p>Phase 2C · Function Detail Content Preview · 隔离候选数据</p></div><span className="p2c-badge">{functionCandidateGraph.nodes.length} active nodes · 未发布</span></header>
   <section className="p2c-notice"><strong>预览模式</strong><span>只读展示 Phase 2B 候选图及 Phase 2C 内容；不会读写账户进度、数据库草稿或生产快照。</span></section>
   <label className="p2c-search">搜索知识<input aria-label="搜索知识详情" value={query} onChange={e=>setQuery(e.target.value)} placeholder="中文 / 拼音 / 首字母 / English / 数学符号 / 学生常用词" maxLength={100}/></label>
   <section className="p2c-list" aria-label="函数知识节点">{results.map(d=><button className="p2c-card" key={d.identity.nodeId} onClick={()=>setSelected(d.identity.nodeId)}><span>{d.identity.knowledgeName}</span><small>{d.identity.nodeId} · {d.metadata.gateStatus} · {d.metadata.evidenceStatus}</small><p>{d.overview}</p></button>)}{!results.length&&<p>没有匹配节点</p>}</section>

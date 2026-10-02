@@ -5,9 +5,6 @@
   .world-wiki-nav{display:none}
   .world-header{display:flex;flex-direction:column;align-items:stretch;margin-inline:-8px;padding:12px 14px;gap:7px}
   .world-header>div:first-child{width:100%;display:flow-root}
-  .world-header .world-wordmark--compact{display:block;float:left;width:58px;height:58px;margin:0 12px 2px 0}
-  .world-header .world-wordmark--compact picture{width:58px;height:58px}
-  .world-header .world-wordmark--compact img{width:58px;height:58px}
   .world-header h1{clear:none;font-size:clamp(18px,5vw,22px);line-height:1.18;margin-bottom:5px;overflow-wrap:anywhere}
   .world-header p{font-size:11px;line-height:1.35}
   .world-header-actions{width:100%;display:block}
@@ -51,4 +48,10 @@
   .world-toolbar{grid-template-columns:auto auto}
   .world-switch{grid-column:1/-1;justify-self:start}
   .world-header h1{font-size:18px}
+}
+
+@media (max-width:900px){
+  .world-header .minetoast-brand--compact{width:clamp(108px,34vw,142px);height:auto}
+  .world-header .minetoast-brand--compact picture{width:100%;height:auto}
+  .world-header .minetoast-brand--compact img{width:100%;height:auto}
 }

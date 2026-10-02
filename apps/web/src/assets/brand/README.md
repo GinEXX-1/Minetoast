@@ -1,11 +1,11 @@
-# Knowledge World brand assets
+# Minetoast brand assets
 
 Original PNGs supplied by the project owner from `/Users/ginex/Downloads/`:
 
-| Original | Local | Window width |
+| Width | Local | Intended display |
 | --- | --- | --- |
-| minecraft-text-1280x720.png | knowledge-world-1280.png | >=1200 CSS px |
-| minecraft-text-960x540.png | knowledge-world-960.png | 701–1199 CSS px |
-| minecraft-text-64x64.png | knowledge-world-64.png | <=700 CSS px |
+| 1275 px | minetoast-1275.png | Large screens |
+| 960 px | minetoast-960.png | Medium screens |
+| 640 px | minetoast-640.png | Small screens |
 
-Source files remain unmodified, with transparency intact. The large/medium logo slot hides transparent canvas padding, preserves image aspect ratio and shows the full artwork. The compact asset is rendered at 64 × 64 in the mobile header. Alt text / link name identify Knowledge World independently of raster text. No license or public redistribution claim is made.
+The owner's `/Users/ginex/Downloads/screenshot.png` is the source. These optimized derivatives preserve its transparent background and 1275:221 aspect ratio. CSS scales the same wide wordmark for desktop, tablet, and phone headers; the responsive source set avoids downloading the largest raster on compact screens. Accessible text identifies Minetoast independently of the raster lettering. No license or public redistribution claim is made.

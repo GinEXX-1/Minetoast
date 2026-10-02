@@ -20,7 +20,7 @@ NODE_MAJOR="$(node -p 'Number(process.versions.node.split(".")[0])')"
 [[ "$NODE_MAJOR" == "24" ]] || fail "项目需要 Node.js 24；当前版本为 $(node -v)。"
 
 if curl --silent --fail "$APP_URL" >/dev/null 2>&1; then
-  print "Knowledge World 已在运行，正在打开浏览器：$APP_URL"
+  print "Minetoast 已在运行，正在打开浏览器：$APP_URL"
   open "$APP_URL"
   exit 0
 fi
@@ -30,7 +30,7 @@ if [[ ! -d node_modules ]]; then
   pnpm install --frozen-lockfile || fail "依赖安装失败。请检查网络和 pnpm 输出后重试。"
 fi
 
-print "正在启动 Knowledge World……"
+print "正在启动 Minetoast……"
 pnpm dev &
 SERVER_PID=$!
 trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT INT TERM

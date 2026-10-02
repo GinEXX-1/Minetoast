@@ -59,7 +59,7 @@ export default function P3BFramePreview(){
  }),[selectedId]);
  const edges=useMemo<FlowEdge[]>(()=>worldGraph.edges.filter(edge=>edge.dependencyType==='strong').map(edge=>({id:edge.id,type:'preview',source:edge.sourceNodeId,target:edge.targetNodeId,markerEnd:{type:MarkerType.ArrowClosed,color:'#70867b'}})),[]);
  const counts=useMemo(()=>Object.fromEntries(frameLevels.map(level=>[level,worldGraph.nodes.filter(node=>levelById.get(node.id)===level).length])) as Record<FrameLevel,number>,[]);
- useEffect(()=>{document.title='P3B Node Frame Preview · Knowledge World';},[]);
+ useEffect(()=>{document.title='P3B Node Frame Preview · Minetoast';},[]);
  return <main className="p3b-page">
   <header className="p3b-header"><div><p>KNOWLEDGE WORLD / PHASE 3B</p><h1>9-State Knowledge Node Frame System</h1><span>仅验证节点框。下方 32 节点图谱使用 Phase 2 真实节点与 Strong 边；九态为内存中的展示覆盖，不代表学生进度。</span></div><a href="/function-world">返回 Phase 2 Function Graph</a></header>
   <section className="p3b-matrix" id="p3b-matrix" aria-labelledby="p3b-matrix-title">

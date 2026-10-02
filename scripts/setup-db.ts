@@ -9,6 +9,7 @@ export async function setupDatabase(db:Database){
  if(!exists.rows[0].name){await db.exec(await readFile(new URL('../packages/database/migrations/0001_phase0.sql',import.meta.url),'utf8'));}
  await db.exec(await readFile(new URL('../packages/database/migrations/0002_authoring.sql',import.meta.url),'utf8'));
  await db.exec(await readFile(new URL('../packages/database/migrations/0003_dependency_quality_gate.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../packages/database/migrations/0004_ponder.sql',import.meta.url),'utf8'));
  const errors=validateGraph(fixture);if(errors.length)throw new Error('Fixture structural errors: '+errors.join(','));
  await db.transaction(async tx=>{
   await tx.query('SELECT pg_advisory_xact_lock(7351001)');

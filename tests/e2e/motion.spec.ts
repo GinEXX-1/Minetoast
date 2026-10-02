@@ -73,6 +73,10 @@ test('drawer wheel and graph zoom produce intermediate positions without changin
 test('curriculum hover summary leaves with the pointer and zoom has a visible animated step',async({page})=>{
  await page.goto('/systems/sets-logic');
  const node=page.getByRole('button',{name:'集合的概念，可解锁',exact:true});
+ // ELK layout and initial fit can move the node after it first mounts.
+ // Hover only once its visible position is stable; retain the actual tooltip assertions.
+ await page.evaluate(()=>document.fonts.ready);
+ await node.evaluate(async element=>{let last='',stable=0;for(let i=0;i<180;i++){await new Promise(requestAnimationFrame);const rect=element.getBoundingClientRect(),position=[rect.x,rect.y,rect.width,rect.height].map(x=>x.toFixed(1)).join(',');stable=position===last?stable+1:0;last=position;if(stable>=20)return;}throw new Error('Node position did not settle');});
  await node.hover();await expect(page.locator('.world-node-tooltip')).toBeVisible();
  await page.locator('.world-toolbar').hover();await expect(page.locator('.world-node-tooltip')).toHaveCount(0);
  const before=await zoom(page);await page.getByRole('button',{name:'Zoom In',exact:true}).click();

@@ -1,5 +1,8 @@
 @media(max-width:900px){
-  .portal-rail{display:none}
+  .portal-rail{display:flex;align-items:center;gap:6px;position:static;margin-bottom:14px;padding:6px;overflow:auto}
+  .portal-rail-heading,.portal-rail nav,.portal-rail-note,.portal-rail>a:not(.active){display:none}
+  .portal-rail>a.active{display:inline-flex;flex:none;white-space:nowrap}
+  .portal-settings-entry{width:auto;min-height:40px;margin-left:auto;padding:7px 12px;border:1px solid #505760;white-space:nowrap}
   .portal-shell{display:block;padding-top:10px}
   .portal-overview{padding-top:6px}
   .portal-controls{gap:10px}
@@ -21,3 +24,12 @@
   .portal-metrics span{font-size:10px}
   .portal-metrics i{height:25px}
 }
+
+/* Responsive Minetoast wordmark sizing: desktop, tablet, and compact phone. */
+.portal-header .portal-brand{width:clamp(150px,17vw,250px);flex:none;gap:5px}
+.portal-header .portal-brand picture{display:block;width:100%;height:auto;overflow:visible}
+.portal-header .portal-brand img{position:static;display:block;width:100%;height:auto;max-width:100%;transform:none;object-fit:contain;image-rendering:auto}
+.portal-header .portal-brand small{display:block;margin-top:3px;color:#aeb8b1;font-size:12px;letter-spacing:.22em;text-align:center}
+@media(max-width:1200px){.portal-header .portal-brand{width:clamp(150px,15vw,185px)}}
+@media(max-width:850px){.portal-header{grid-template-columns:minmax(132px,168px) minmax(0,1fr)}.portal-header .portal-brand{width:clamp(132px,23vw,168px)}}
+@media(max-width:560px){.portal-header .portal-brand{width:clamp(132px,40vw,160px)}.portal-header .portal-brand small{font-size:10px}}

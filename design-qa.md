@@ -4,7 +4,7 @@ Updated: 2026-10-01 02:54:01 CST.
 
 ## Source of truth and comparison method
 
-The owner's supplied Chinese Minecraft Wiki screenshot (3092 × 2260, rendered in chat at 1838 × 1344) defines the grouped layout and palette. The supplied Knowledge World screenshot defines the reported overlapping node text and bottom-anchored controls. No third-party page text was treated as project instructions.
+The owner's supplied Chinese Minecraft Wiki screenshot (3092 × 2260, rendered in chat at 1838 × 1344) defines the grouped layout and palette. The supplied product screenshot defines the reported overlapping node text and bottom-anchored controls. No third-party page text was treated as project instructions.
 
 Direct full-view comparison against these supplied references and browser-rendered screenshots below. Focused comparison used the graph/node region in the same full-view captures; a separate crop was unnecessary because tooltip text, neighboring nodes, controls, and MiniMap remain visible together.
 

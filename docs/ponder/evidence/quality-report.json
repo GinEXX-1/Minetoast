@@ -1,0 +1,405 @@
+{
+  "generatedAt": "2026-10-02T18:40:25.511Z",
+  "scope": "Numerical smoke is not independent review or proof",
+  "reports": [
+    {
+      "id": "function-monotonicity",
+      "nodeId": "HS-FUNC-MONO-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "a2c79f472965b5e3bbe932fbae768c69eb309f9e9781c280322521505c2d8b50"
+    },
+    {
+      "id": "circle-tangent",
+      "nodeId": "HS-GEO-CIRCLE-EQUATION-001",
+      "renderer": "geometry",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "0074185a18281e8c044ef000217f677001f8e24be4ff7b336903d61a372dcf81"
+    },
+    {
+      "id": "line-plane-perpendicular",
+      "nodeId": "HS-GEO-LINE-PLANE-PERP-CRITERION-001",
+      "renderer": "solid",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "b8c731376d90e8269506e4113a1f3dcc1813a14090c5ba7fbc67218f9e2c0754"
+    },
+    {
+      "id": "quadratic-parameter",
+      "nodeId": "HS-FUNC-QUAD-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "fc26107eaa12ced3c10327f0ffaf50c6e74a3f590ceb7c94ff1fba8f80251b75"
+    },
+    {
+      "id": "function-zeros",
+      "nodeId": "HS-FUNC-ZERO-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "a4af23109c4c8c40165a550f0f061e68db5cc938d115cbd3c88ec068136947ee"
+    },
+    {
+      "id": "linear-slope",
+      "nodeId": "HS-FUNC-LINEAR-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "31210007136565db9a2e151062f6ed2de8e07e06adb35ae3949aa17838a8fd8f"
+    },
+    {
+      "id": "unit-circle",
+      "nodeId": "HS-TRIG-UNIT-CIRCLE-001",
+      "renderer": "geometry",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "837bb077f452f4b79bc0c36a6b485a81d1e745c01c458f1c9b0eb97f77e2aee2"
+    },
+    {
+      "id": "derivative-tangent",
+      "nodeId": "HS-CALC-TANGENT-SLOPE-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "7cce7aa63ec7d0e943a7d827cce5d04ba956c7cd496a6983320e149963d0bb77"
+    },
+    {
+      "id": "line-plane-parallel",
+      "nodeId": "HS-GEO-LINE-PLANE-PARALLEL-001",
+      "renderer": "solid",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "f06488cba98b0faa64911de538edbdfe37fdebe493263c6fed24cfbf415f2cf1"
+    },
+    {
+      "id": "plane-plane-parallel",
+      "nodeId": "HS-GEO-PLANE-PLANE-PARALLEL-001",
+      "renderer": "solid",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "db7ae4a72e4fc30983af0a065f108f38835151c1bab69ab35c608d185a94ad20"
+    },
+    {
+      "id": "line-plane-angle",
+      "nodeId": "HS-GEO-ANGLE-LINE-PLANE-001",
+      "renderer": "solid",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "901b7d2443a2ab4d14d5b7c683e05967aebfca8675afd596b19a1154918a9870"
+    },
+    {
+      "id": "dihedral-angle",
+      "nodeId": "HS-GEO-DIHEDRAL-ANGLE-001",
+      "renderer": "solid",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "e7f763078dbaa2b1434d4c8593d97f37d234e0c23320780a7074adb6ee297706"
+    },
+    {
+      "id": "sine-from-circle",
+      "nodeId": "HS-TRIG-SIN-GRAPH-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "a975d77ef59ccc2144c310388bb65ee0c50891ed38e26d6c1750f102c76cc48c"
+    },
+    {
+      "id": "sinusoidal-parameters",
+      "nodeId": "HS-TRIG-SINUSOIDAL-FAMILY-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "13d0b70b704e19e8d691eaef3072b908710b29bf610d634a704c877e0f98b844"
+    },
+    {
+      "id": "average-rate",
+      "nodeId": "HS-CALC-RATE-OF-CHANGE-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "8b06faa1d235ec617d4a328eb22565d99d67334bd02bcc562263d25669ee7f0b"
+    },
+    {
+      "id": "derivative-monotonicity",
+      "nodeId": "HS-CALC-MONOTONICITY-CRITERION-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "30e6b6ba51db6f9d051e9e7c6c4e00a8a5ada3289dd29b5b362b4d32393ad72c"
+    },
+    {
+      "id": "local-maximum",
+      "nodeId": "HS-CALC-LOCAL-MAXIMUM-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "72fcc4c40410c7675b16e36b7b23f66a2af0ef540cc41204d17227a59384c613"
+    },
+    {
+      "id": "local-minimum",
+      "nodeId": "HS-CALC-LOCAL-MINIMUM-001",
+      "renderer": "coordinate",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "3c5e854d9b10396102755dbeab62e74a4970f262df96ebdaa671540737314c5f"
+    },
+    {
+      "id": "vector-dot-product",
+      "nodeId": "HS-VECTOR-DOT-PRODUCT-001",
+      "renderer": "geometry",
+      "mathematicalSmoke": [],
+      "decision": "REVIEW_REQUIRED",
+      "confidence": "LOW",
+      "issues": [
+        "MATHEMATICAL_CORRECTNESS: verified HIGH confidence evidence required",
+        "PEDAGOGICAL_VALUE: verified HIGH confidence evidence required",
+        "REPRESENTATION_ACCURACY: verified HIGH confidence evidence required",
+        "DSL_VALIDITY: verified HIGH confidence evidence required",
+        "RENDER_VALIDITY: verified HIGH confidence evidence required",
+        "INTERACTION_VALIDITY: verified HIGH confidence evidence required",
+        "PERFORMANCE: verified HIGH confidence evidence required",
+        "ACCESSIBILITY: verified HIGH confidence evidence required",
+        "TEXTBOOK_ALIGNMENT: verified HIGH confidence evidence required",
+        "Independent review required for this exact scene"
+      ],
+      "digest": "786c03935cdb561916e5b50ab08db5cc1cfd0d2d480b60d862c07b1af606ca06"
+    }
+  ]
+}

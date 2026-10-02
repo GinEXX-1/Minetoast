@@ -1,4 +1,4 @@
-# Knowledge World — Phase 3 Visual Bible
+# Minetoast — Phase 3 Visual Bible
 
 状态：`DEPRECATED / NOT FOR PRODUCTION`。本文记录旧 Function Dimension / World Map 方向，**不再是 Phase 3 规范**。现行范围与组件规则见 [Phase 3 UI Visual Bible](./PHASE-3-UI-VISUAL-BIBLE.md)。保留历史内容，不得继续执行文末的 Realm 母图或 4K 流水线。  
 更新：2026-09-26  
