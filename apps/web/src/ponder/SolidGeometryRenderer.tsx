@@ -39,7 +39,7 @@ export default function SolidGeometryRenderer(props:RendererProps){
   }
   let manual=false;const up=new THREE.Vector3(0,1,0);
   const segment=(mesh:THREE.Mesh,a:THREE.Vector3,b:THREE.Vector3,draw:number,thickness:number)=>{const end=a.clone().lerp(b,draw),direction=end.clone().sub(a),length=direction.length();mesh.visible=length>1e-8;mesh.position.copy(a).add(end).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(up,direction.normalize());mesh.scale.set(thickness,length,thickness);};
-  const render=()=>{renderer.domElement.dataset.camera=camera.position.toArray().map(n=>n.toFixed(3)).join(',');renderer.render(world,camera);for(const entry of cache.values()){const projected=entry.anchor.clone().project(camera);entry.label.style.left=`${(projected.x+1)*element.clientWidth/2}px`;entry.label.style.top=`${(1-projected.y)*element.clientHeight/2}px`;entry.label.hidden=!entry.root.visible||projected.z>1;}};
+  const render=()=>{renderer.domElement.dataset.camera=camera.position.toArray().map(n=>n.toFixed(3)).join(',');renderer.render(world,camera);for(const entry of cache.values()){const projected=entry.anchor.clone().project(camera);entry.label.style.left=`${(projected.x+1)*element.clientWidth/2}px`;entry.label.style.top=`${(1-projected.y)*element.clientHeight/2}px`;entry.label.hidden=!entry.label.textContent||!entry.root.visible||projected.z>1;}};
   const draw=()=>{
    const {model,parameters,step,frame,showAuxiliary}=latest.current;
    for(const o of model.scene.objects){const entry=cache.get(o.id)!,motion=frame.objects[o.id];entry.root.visible=!!motion&&(!('auxiliary' in o)||!o.auxiliary||showAuxiliary);if(!entry.root.visible)continue;
