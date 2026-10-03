@@ -26,6 +26,6 @@ for(const scene of batchTwoScenes)test(`batch two ${scene.id}: playback, interac
   const stage=await page.locator('.ponder-stage').boundingBox(),caption=await page.locator('.ponder-caption').boundingBox();expect(stage!.y+stage!.height).toBeLessThanOrEqual(caption!.y+1);
   await page.screenshot({path:`docs/ponder/evidence/batch-two/${scene.id}-${width}-night.png`});
  }
- await page.getByRole('button',{name:'设置',exact:true}).click();await page.getByRole('button',{name:'显示模式：夜间'}).click();await page.getByRole('dialog',{name:'选项',exact:true}).getByRole('button',{name:'完成',exact:true}).click();await page.screenshot({path:`docs/ponder/evidence/batch-two/${scene.id}-390-day.png`});
+ await page.locator('.ponder-focus').getByRole('button',{name:'设置',exact:true}).click();await page.getByRole('button',{name:'显示模式：夜间'}).click();await page.getByRole('dialog',{name:'选项',exact:true}).getByRole('button',{name:'完成',exact:true}).click();await page.screenshot({path:`docs/ponder/evidence/batch-two/${scene.id}-390-day.png`});
  expect(errors).toEqual([]);await page.getByRole('button',{name:'退出思索'}).click();await expect(page.getByRole('button',{name:'按下开始思索'})).toBeFocused();
 });

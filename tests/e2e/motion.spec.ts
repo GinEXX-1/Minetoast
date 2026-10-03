@@ -31,12 +31,18 @@ test('portal navigation captures both pages for a fade transition',async({page})
 
 test('important unlock produces visible bounded particles and a draggable modal notification',async({page})=>{
  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+ await page.addInitScript(()=>{
+  const animate=Element.prototype.animate;
+  Element.prototype.animate=function(keyframes,options){
+   if(this.matches('dialog.world-drawer'))sessionStorage.setItem('drawer-entry-animation',JSON.stringify({keyframes,options}));
+   return animate.call(this,keyframes,options);
+  };
+ });
  const id=await prepareKey(page);
  const drawer=page.getByRole('dialog');
- const timing=await drawer.evaluate(element=>element.getAnimations().map(animation=>animation.effect?.getTiming().easing));
- expect(timing).toContain('linear');
- const opacityFrames=await drawer.evaluate(element=>element.getAnimations().flatMap(animation=>animation.effect instanceof KeyframeEffect?animation.effect.getKeyframes().map(frame=>Number(frame.opacity)):[]));
- expect(opacityFrames).toEqual(expect.arrayContaining([0,1]));
+ const entry=await page.evaluate(()=>JSON.parse(sessionStorage.getItem('drawer-entry-animation')??'null')) as {keyframes:{opacity:number}[];options:{easing:string}}|null;
+ expect(entry?.options.easing).toBe('linear');
+ expect(entry?.keyframes.map(frame=>frame.opacity)).toEqual([0,1]);
  const toast=drawer.locator('.kw-motion-toast.key');
  await expect(toast).toContainText('关键成就达成');
  await expect(toast.locator('.kw-spark')).toHaveCount(24);

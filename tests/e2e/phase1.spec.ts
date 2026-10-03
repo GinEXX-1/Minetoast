@@ -41,6 +41,8 @@ test('rapid initialization coalesces targets without achievement toasts',async({
  await page.getByRole('textbox',{name:'用户名',exact:true}).fill('batch_'+randomUUID().slice(0,8));await page.getByLabel('密码',{exact:true}).fill(randomUUID());await page.getByRole('button',{name:'创建并登录'}).click();
  await expect(page.getByRole('button',{name:'完成初始化'})).toBeVisible();
  const commands:any[]=[];page.on('request',request=>{if(request.url().endsWith('/me/progress/commands'))commands.push(request.postDataJSON());});
+ await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toBeAttached();
+ await expect(page.getByTestId('node-HS-FUNC-LINEAR-001')).toBeAttached();
  // Same event-loop burst models fast taps without locator navigation delays.
  await page.evaluate(()=>{for(const id of ['HS-FUNC-QUAD-001','HS-FUNC-LINEAR-001'])document.querySelector<HTMLElement>(`[data-testid="node-${id}"]`)!.click();});
  await expect(page.getByTestId('node-HS-FUNC-QUAD-001')).toHaveAttribute('data-status','unlocked');await expect(page.getByTestId('node-HS-FUNC-LINEAR-001')).toHaveAttribute('data-status','unlocked');

@@ -5,7 +5,8 @@ test('compact portal exposes the systems without a duplicate navigation wall',as
   const context=await browser.newContext({baseURL:'http://127.0.0.1:4187',viewport:{width,height:844},isMobile:true,hasTouch:true});
   const page=await context.newPage();
   await page.goto('/');
-  await expect(page.locator('.portal-rail')).toBeHidden();
+  await expect(page.locator('.portal-rail')).toBeVisible();
+  await expect(page.locator('.portal-rail nav')).toBeHidden();
   await expect(page.locator('.portal-card').first()).toBeVisible();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(width);
   await context.close();

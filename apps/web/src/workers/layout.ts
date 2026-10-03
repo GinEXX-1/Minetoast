@@ -8,7 +8,8 @@ export function startLayout(graph: Graph, options:{direction?:'RIGHT'|'DOWN';nod
   const started = performance.now();
   const direction=options.direction??'RIGHT';
   const nodeWidth=options.nodeWidth??210,nodeHeight=options.nodeHeight??100,nodeSpacing=options.nodeSpacing??42,layerSpacing=options.layerSpacing??105;
-  const key=JSON.stringify({releaseId:(graph as Graph&{releaseId?:string}).releaseId,version:'v2',direction,size:[nodeWidth,nodeHeight],spacing:[nodeSpacing,layerSpacing],nodes:graph.nodes.map(n=>[n.id,n.domainId]),edges:graph.edges.filter(e=>e.enabled&&e.dependencyType==='strong').map(e=>[e.sourceNodeId,e.targetNodeId])});
+  const largeGraph=graph.nodes.length>=200;
+  const key=JSON.stringify({releaseId:(graph as Graph&{releaseId?:string}).releaseId,version:'v3',direction,size:[nodeWidth,nodeHeight],spacing:[nodeSpacing,layerSpacing],nodes:graph.nodes.map(n=>[n.id,n.domainId]),edges:graph.edges.filter(e=>e.enabled&&e.dependencyType==='strong').map(e=>[e.sourceNodeId,e.targetNodeId])});
   const cached=cache.get(key);if(cached)return {result:Promise.resolve(cached),cancel:()=>{}};
   const worker = new ElkWorker();
   const elk = new ELK({ workerFactory: () => worker });
@@ -20,7 +21,17 @@ export function startLayout(graph: Graph, options:{direction?:'RIGHT'|'DOWN';nod
   const result = Promise.race([
     elk.layout({
       id: 'root',
-      layoutOptions: { 'elk.algorithm': 'layered', 'elk.direction': direction, 'elk.spacing.nodeNode': String(nodeSpacing), 'elk.layered.spacing.nodeNodeBetweenLayers': String(layerSpacing) },
+      layoutOptions: {
+        'elk.algorithm': 'layered',
+        'elk.direction': direction,
+        'elk.spacing.nodeNode': String(nodeSpacing),
+        'elk.layered.spacing.nodeNodeBetweenLayers': String(layerSpacing),
+        ...(largeGraph ? {
+          'elk.layered.layering.strategy': 'LONGEST_PATH',
+          'elk.layered.nodePlacement.strategy': 'SIMPLE',
+          'elk.layered.crossingMinimization.strategy': 'MEDIAN_LAYER_SWEEP',
+        } : {}),
+      },
       children: graph.nodes.map(n => ({ id: n.id, width: nodeWidth, height: nodeHeight })),
       edges: graph.edges.filter(e => e.enabled && e.dependencyType === 'strong')
         .map(e => ({ id: e.id, sources: [e.sourceNodeId], targets: [e.targetNodeId] })),
