@@ -1,6 +1,7 @@
 import {useEffect,useMemo,useState} from 'react';
 import {Background,BaseEdge,Handle,MarkerType,MiniMap,Position,ReactFlow,useReactFlow,useViewport,type Edge as FlowEdge,type EdgeProps,type Node as FlowNode,type NodeProps} from '@xyflow/react';
 import {fallbackWorldPositions,worldGraph,worldKeys,worldNodes} from './function-world-model';
+import {graphExtent} from './graph-extent';
 import {KnowledgeNodeFrame,frameLevelFor,frameLevelLabels,frameLevels,frameStateLabels,frameStates,type FrameLevel,type FrameState} from './KnowledgeNodeFrame';
 import './p3b-frame-preview.css';
 
@@ -77,7 +78,7 @@ export default function P3BFramePreview(){
    <div className="p3b-graph-intro"><div><h2 id="p3b-graph-title">真实 32 节点图谱预览</h2><p>Normal {counts.normal} · Core {counts.core} · Key {counts.key}。每级前三个节点依次覆盖 Locked、Available、Unlocked；其余为 Locked。名称通过聚焦/悬停读取；只验证视觉密度，不改解锁语义。</p></div><div className="p3b-graph-intro__tags"><span>HOVER = 点状外框</span><span>SELECTED = 连续外框</span><span>FOCUS = 高对比外框</span></div></div>
    {selectedId&&<div className="p3b-selected" role="status">选中：{worldNodes.get(selectedId)?.canonicalName} · {frameLevelLabels[levelById.get(selectedId)!]} · {frameStateLabels[previewStateById.get(selectedId)!]}</div>}
    <div className="p3b-graph-stage" data-ready={ready}>
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} minZoom={.1} maxZoom={1.5} onInit={flow=>{setReady(true);window.setTimeout(()=>void flow.fitView({padding:.12,duration:0}),0)}} proOptions={{hideAttribution:false}}>
+    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes} nodesDraggable={false} nodesConnectable={false} minZoom={.1} maxZoom={1.5} translateExtent={graphExtent(nodes)} nodeExtent={graphExtent(nodes)} onInit={flow=>{setReady(true);window.setTimeout(()=>void flow.fitView({padding:.12,duration:0}),0)}} proOptions={{hideAttribution:false}}>
      <Background color="#3f5049" gap={32} size={1}/><MiniMap pannable zoomable nodeColor={node=>{const level=(node.data as unknown as PreviewNodeData).level;return level==='key'?'#d4bd7f':level==='core'?'#88a99b':'#657970'}} maskColor="rgba(8,16,13,.62)"/>
     </ReactFlow>
     <GraphToolbar/>

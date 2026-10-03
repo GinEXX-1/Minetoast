@@ -37,7 +37,8 @@ describe('approved batch mathematical boundaries',()=>{
 });
 describe('settings validation and contrast palette',()=>{
  it('rejects malformed preferences and invalid color values while preserving valid custom colors',()=>{
-  expect(parsePreferences('broken')).toEqual({theme:'night',comfort:false,colors:{}});expect(parsePreferences('{"theme":"invalid","comfort":1,"colors":{"cyan":"red","gold":"#123456","unknown":"#abcdef"}}')).toEqual({theme:'night',comfort:false,colors:{gold:'#123456'}});
+  expect(parsePreferences('broken')).toEqual({theme:'night',comfort:false,volume:1,colors:{}});expect(parsePreferences('{"theme":"invalid","comfort":1,"colors":{"cyan":"red","gold":"#123456","unknown":"#abcdef"}}')).toEqual({theme:'night',comfort:false,volume:1,colors:{gold:'#123456'}});
+  expect(parsePreferences('{"theme":"auto","volume":2}')).toMatchObject({theme:'auto',volume:1});expect(parsePreferences('{"volume":-1}').volume).toBe(0);
   const p=parsePreferences('{"theme":"day","comfort":true,"colors":{"cyan":"#234567"}}');expect(lineColors('coordinate',p).cyan).toBe('#234567');expect(lineColors('solid',p).green).toBe('#2c6f44');expect(defaults(scene('average-rate')).h).toBeGreaterThan(0);
  });
 });

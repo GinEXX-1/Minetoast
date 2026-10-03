@@ -1,4 +1,5 @@
 import {useState,useEffect,useRef} from 'react';
+import {usePreferences} from './settings/preferences';
 import type {KnowledgeNode,ProgressBackup} from '../../../packages/domain/src/index';
 type Api=<T>(path:string,body?:unknown,csrf?:string|null)=>Promise<T>;
 export function BackupPanel({api,csrf,submit,disabled}:{api:Api;csrf:string;submit:(c:unknown)=>Promise<void>;disabled:boolean}) {
@@ -30,6 +31,6 @@ export function useFeedback(){
  function toggle(){setMuted(v=>{try{localStorage.setItem('kw-muted',String(!v));}catch{/* Storage may be disabled. */}return !v;});}
  function gesture(){if(muted)return;try{context.current??=new AudioContext();void context.current.resume().catch(()=>{});}catch{/* No audio support; visual confirmation remains. */}}
  function confirm(key:string,name:string){if(played.current.has(key))return;played.current.add(key);setToasts(list=>[...list,{id:key,name}].slice(-3));timers.current.push(setTimeout(()=>setToasts(list=>list.filter(x=>x.id!==key)),3500));
-  const ctx=context.current;if(!muted&&ctx?.state==='running'){const osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=660;gain.gain.setValueAtTime(.025,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.15);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.15);osc.onended=()=>{osc.disconnect();gain.disconnect();};}}
+  const ctx=context.current,volume=usePreferences.getState().volume;if(!muted&&volume>0&&ctx?.state==='running'){const osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=660;gain.gain.setValueAtTime(.025*volume,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.15);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.15);osc.onended=()=>{osc.disconnect();gain.disconnect();};}}
  return {muted,toggle,gesture,confirm,toasts};
 }

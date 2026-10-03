@@ -2,7 +2,10 @@
 .world-mobile-next{display:none}
 @media (max-width:900px){
   .function-world{display:block;padding:0 8px 12px;overflow-x:clip}
-  .world-wiki-nav{display:none}
+  .function-world .world-wiki-nav{display:block;padding:7px 0 0}
+  .world-wiki-nav>.minetoast-brand,.world-wiki-nav section:not(:first-of-type),.world-wiki-nav section:first-of-type h2{display:none}
+  .world-wiki-nav section:first-of-type{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0;padding:5px 8px}
+  .world-wiki-nav section:first-of-type button,.world-wiki-nav section:first-of-type a{width:auto;padding:7px 8px;white-space:nowrap;font-size:12px}
   .world-header{display:flex;flex-direction:column;align-items:stretch;margin-inline:-8px;padding:12px 14px;gap:7px}
   .world-header>div:first-child{width:100%;display:flow-root}
   .world-header h1{clear:none;font-size:clamp(18px,5vw,22px);line-height:1.18;margin-bottom:5px;overflow-wrap:anywhere}

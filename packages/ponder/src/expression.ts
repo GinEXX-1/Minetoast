@@ -1,6 +1,14 @@
 /** Bounded arithmetic grammar. No code evaluation, properties, strings or assignments. */
 type Ast={kind:'number';value:number}|{kind:'variable';name:string}|{kind:'unary';op:string;value:Ast}|{kind:'binary';op:string;left:Ast;right:Ast}|{kind:'call';name:string;args:Ast[]};
-const functions:Record<string,{arity:number;run:(...x:number[])=>number}>={sin:{arity:1,run:Math.sin},cos:{arity:1,run:Math.cos},tan:{arity:1,run:Math.tan},sqrt:{arity:1,run:Math.sqrt},abs:{arity:1,run:Math.abs},exp:{arity:1,run:Math.exp},log:{arity:1,run:Math.log},min:{arity:2,run:Math.min},max:{arity:2,run:Math.max}};
+/** Seeded Bernoulli prefixes are repeatable experiments, never a convergence proof. */
+const trialCache=new Map<string,Float64Array>();
+export function trialFrequency(n:number,p:number,seed:number):number{
+ const count=Math.floor(n);if(count<1||count>1000||p<0||p>1||!Number.isInteger(seed)||seed<1||seed>10)throw new Error('Invalid bounded trial experiment');
+ const key=`${p}:${seed}`;let prefix=trialCache.get(key);
+ if(!prefix){prefix=new Float64Array(1001);let state=seed;for(let i=1;i<=1000;i++){state=(Math.imul(state,1664525)+1013904223)>>>0;prefix[i]=prefix[i-1]+(state/4294967296<p?1:0);}if(trialCache.size>=32)trialCache.delete(trialCache.keys().next().value!);trialCache.set(key,prefix);}
+ return prefix[count]/count;
+}
+const functions:Record<string,{arity:number;run:(...x:number[])=>number}>={floor:{arity:1,run:Math.floor},frequency:{arity:3,run:trialFrequency},sin:{arity:1,run:Math.sin},cos:{arity:1,run:Math.cos},tan:{arity:1,run:Math.tan},sqrt:{arity:1,run:Math.sqrt},abs:{arity:1,run:Math.abs},exp:{arity:1,run:Math.exp},log:{arity:1,run:Math.log},min:{arity:2,run:Math.min},max:{arity:2,run:Math.max}};
 export function parseExpression(source:string):Ast{
  if(source.length>256||!source.trim())throw new Error('Expression size invalid');
  const tokens:string[]=[];const re=/\s*(?:(\d+(?:\.\d*)?|\.\d+)|([A-Za-z][A-Za-z0-9_]*)|([+\-*/^(),]))/y;let at=0;

@@ -68,7 +68,7 @@ export default function SolidGeometryRenderer(props:RendererProps){
   engine.current={draw,reset,beginStep:()=>{manual=false;draw();}};reset();draw();
   return()=>{engine.current=null;observer.disconnect();controls.removeEventListener('change',render);controls.removeEventListener('start',interact);controls.dispose();for(const item of cache.values())item.label.remove();resources.geometries.forEach(g=>g.dispose());resources.materials.forEach(m=>m.dispose());renderer.domElement.removeEventListener('webglcontextlost',lost);renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();};
  },[props.model]);
- useEffect(()=>engine.current?.draw(),[props.parameters,props.step,props.frame,props.showAuxiliary,preferences.colors,preferences.theme]);
+ useEffect(()=>engine.current?.draw(),[props.parameters,props.step,props.frame,props.showAuxiliary,preferences.colors,preferences.resolvedTheme]);
  useEffect(()=>engine.current?.reset(),[props.cameraReset]);
  useEffect(()=>engine.current?.beginStep(),[props.step.id]);
  return <div className="ponder-solid" data-testid="ponder-solid-renderer"><div ref={host} className="ponder-webgl"/>{error&&<p className="ponder-webgl-error" role="alert">{error}</p>}<p className="ponder-camera-hint">拖动旋转 · 滚轮缩放 · 随时恢复最佳视角</p></div>;

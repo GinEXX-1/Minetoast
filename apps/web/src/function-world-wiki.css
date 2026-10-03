@@ -94,10 +94,12 @@
 @media(prefers-reduced-motion:reduce){.function-world{--kw-motion-hover:0ms;--kw-motion-unlock:0ms;--kw-motion-toast:0ms;--kw-motion-edge:0ms;--kw-motion-edge-delay:0ms}.world-node-tooltip{animation:none}}
 
 /* The supplied Minetoast mark is a horizontal wordmark; always preserve its source ratio. */
-.minetoast-brand{display:flex;flex-direction:column;align-items:center;flex:none;margin:4px 0 20px;text-decoration:none;color:#eee!important;text-shadow:3px 3px #0e1119}
+.minetoast-brand{display:flex;flex-direction:column;align-items:center;flex:none;margin:4px 0 20px;text-decoration:none;color:#eee!important;text-shadow:none}
 .minetoast-brand picture{display:block;width:100%;height:auto;overflow:visible}
 .minetoast-brand img{position:static;display:block;width:100%;height:auto;max-width:100%;transform:none;object-fit:contain;image-rendering:auto}
 .minetoast-brand small{margin-top:8px;color:#b9c1c8;font-size:13px}
 .minetoast-brand--compact{display:none}
 .world-wiki-nav .minetoast-brand{width:100%;margin:4px 0 20px}
+.world-wiki-nav section button{background:transparent;border:0;border-radius:0;box-shadow:none;padding:7px 3px;color:#d4d5d9}
+@media(max-width:700px){.world-wiki-nav{display:block;padding:8px 0 0}.world-wiki-nav>.minetoast-brand,.world-wiki-nav section:not(:first-of-type),.world-wiki-nav section:first-of-type h2{display:none}.world-wiki-nav section:first-of-type{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0;padding:5px 8px}.world-wiki-nav section:first-of-type button,.world-wiki-nav section:first-of-type a{width:auto;padding:7px 8px;white-space:nowrap;font-size:12px}}
 @media(max-width:900px){.world-header .minetoast-brand--compact{display:block;float:left;width:clamp(108px,34vw,142px);height:auto;margin:0 12px 6px 0;text-shadow:none}.world-header .minetoast-brand--compact picture{width:100%;height:auto}.world-header .minetoast-brand--compact img{width:100%;height:auto}.world-header h1{clear:none}}

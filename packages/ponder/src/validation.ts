@@ -18,7 +18,13 @@ export function validateMathematics(input:unknown):string[]{
     if(o.kind==='plot'){// Undefined plot samples create gaps; reject an entirely undefined graph.
      if(o.end){const end=model.value(o.end,p);if(end<o.domain[0]-1e-8||end>o.domain[1]+1e-8)issues.add(`Plot endpoint outside domain ${o.id}`);}
      let valid=0;for(let i=0;i<=24;i++)try{model.value(o.expression,p,{x:o.domain[0]+(o.domain[1]-o.domain[0])*i/24});valid++;}catch{/* A domain gap is represented without a connecting stroke. */}if(!valid)issues.add(`Plot ${o.id} entirely undefined`);
-    }else if(o.kind==='point')model.v2(o.at,p);
+     }else if(o.kind==='parametric'){
+     const end=o.end?model.value(o.end,p):o.domain[1];if(end<o.domain[0]-1e-8||end>o.domain[1]+1e-8)issues.add(`Parametric endpoint outside domain ${o.id}`);
+     for(let i=0;i<=24;i++){const x=o.domain[0]+(o.domain[1]-o.domain[0])*i/24;model.value(o.x,p,{x});model.value(o.y,p,{x});}
+    }else if(o.kind==='polygon')o.vertices.forEach(v=>model.v2(v,p));
+    else if(o.kind==='samples'){o.points.forEach(v=>model.v2(v,p));if(o.count)model.value(o.count,p);}
+    else if(o.kind==='region'){const a=model.v2(o.bounds[0],p),b=model.v2(o.bounds[1],p);if(a[0]>=b[0]||a[1]>=b[1])issues.add(`Invalid region bounds ${o.id}`);}
+    else if(o.kind==='point'||o.kind==='label')model.v2(o.at,p);
     else if(o.kind==='segment'){model.v2(o.from,p);model.v2(o.to,p);}
     else if(o.kind==='circle'){model.v2(o.center,p);if(model.value(o.radius,p)<=0)issues.add(`Nonpositive radius ${o.id}`);}
     else if(o.kind==='line'){model.v2(o.through,p);if(Math.hypot(...model.v2(o.direction,p))<1e-8)issues.add(`Degenerate line ${o.id}`);}

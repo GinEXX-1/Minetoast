@@ -58,7 +58,8 @@ html[data-theme=day] .app-shell .detail-drawer .conditions,html[data-theme=day] 
 
 /* Day mode uses warm paper surfaces and explicit ink colors for content that
    otherwise inherits the night palette from the graph and wiki styles. */
-html[data-theme=day] .knowledge-portal,html[data-theme=day] .portal-card{background-image:none}
+html[data-theme=day] .knowledge-portal{background-image:none}
+html[data-theme=day] .portal-card{background-image:linear-gradient(90deg,#fffaf0db,#f4ebdfe3),var(--card-bg);background-size:auto,cover;background-position:center}
 html[data-theme=day] .world-search label,html[data-theme=day] .world-search input::placeholder,html[data-theme=day] .world-path-summary,html[data-theme=day] .world-switch label{color:#43513d}
 html[data-theme=day] .world-search input::placeholder{opacity:1}
 html[data-theme=day] .world-node-tooltip small,html[data-theme=day] .world-node-tooltip em,html[data-theme=day] .world-node-tooltip p{color:#43513d}
@@ -103,3 +104,17 @@ html[data-theme=day] .portal-card-mark svg rect[fill="#b8d0c0"]{fill:#30382f}
 html[data-theme=day] .portal-card-mark svg rect[fill="#8ad5a3"]{fill:#396c49}
 html[data-theme=day] .portal-card-mark svg rect[fill="#e8d28b"]{fill:#835b18}
 html[data-theme=day] .minetoast-brand small{color:#495743}
+html[data-theme=day] .curriculum-selected-preview{background:#f4ecdc;border-color:#8b967c;box-shadow:inset 1px 1px #fff,3px 3px #d1c7b5}
+html[data-theme=day] .curriculum-selected-preview h3{color:#293228}
+html[data-theme=day] .curriculum-selected-preview p{color:#495743}
+html[data-theme=day] .world-toasts>div.kw-motion-toast,html[data-theme=day] .curriculum-world-toasts>div.kw-motion-toast{background:#e8efdd;color:#253721;border-color:#5c9368;box-shadow:4px 4px 0 #c3cbbb}
+html[data-theme=day] .world-toasts>div.kw-motion-toast.key,html[data-theme=day] .curriculum-world-toasts>div.kw-motion-toast.key{background:#f4ead0;color:#4f3d1e;border-color:#a68844}
+html[data-theme=day] .portal-rail>.portal-settings-entry{color:#386832;background:transparent;border:0;box-shadow:none;text-shadow:none}
+html[data-theme=day] .portal-rail>.portal-settings-entry:hover{background:#d9e6c9;color:#263c20}
+html[data-theme=day] .portal-rail>a.active{color:#263c20}
+html[data-theme=day] .world-wiki-nav section button{background:transparent;border:0;box-shadow:none;color:#386832}
+html[data-theme=day] .world-wiki-nav section button:hover{background:#d9e6c9}
+html[data-theme=day] .kw-volume-control{--kw-volume-fill:#699967;--kw-volume-empty:#c9c2b2;--kw-volume-border:#625c50;background:#d9d0be;color:#293228;border-color:#625c50;box-shadow:inset 3px 3px #fffaf0,inset -3px -3px #a99f8a,4px 4px #c9c0ae;text-shadow:none}
+html[data-theme=day] .kw-volume-control output{background:#f7f0e4;color:#293d27;border-color:#625c50;box-shadow:inset 2px 2px #fff,inset -2px -2px #b2a894}
+html[data-theme=day] .kw-volume-control input[type=range]::-webkit-slider-thumb{background:#f7f0e4;border-color:#514b40;box-shadow:inset 3px 3px #fff,inset -3px -3px #aea38f,2px 2px #a99f8a}
+html[data-theme=day] .kw-volume-control input[type=range]::-moz-range-thumb{background:#f7f0e4;border-color:#514b40;box-shadow:inset 3px 3px #fff,inset -3px -3px #aea38f,2px 2px #a99f8a}

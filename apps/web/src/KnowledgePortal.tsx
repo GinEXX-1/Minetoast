@@ -98,7 +98,7 @@ export function KnowledgePortal() {
       <aside className="portal-rail" aria-label="主导航">
         <div className="portal-rail-heading">导航</div>
         <a className="active" href="#systems">知识体系</a>
-        <a href="#about">项目说明</a>
+        <a href="/about">项目说明</a>
         <button className="portal-settings-entry" type="button" onClick={openSettings}>设置</button>
         <div className="portal-rail-heading portal-rail-domains">体系索引 <span>09</span></div>
         <nav>{systems.map(s => <a href={s.status === 'live' ? '/function-world' : `/systems/${s.id}`} key={s.id}><i className={s.reviewStatus === 'approved' ? 'dot live' : 'dot'} />{s.name}</a>)}</nav>
@@ -127,7 +127,7 @@ export function KnowledgePortal() {
           {visibleSystems.length === 0 && <p className="portal-empty">没有匹配的知识体系。</p>}
         </div>
 
-        <section className="portal-note" id="about"><span className="portal-note-icon"><CurriculumPixelIcon systemId="geometry" width={24} height={24}/></span><p><b>体系审核状态</b><br/>{approvedSystemCount} 个知识体系均已通过审核；其中函数体系的 {formalNodeCount} 个节点已正式接入，其他专题的 {candidateNodeCount} 个节点保留候选标识并可在独立页面学习。</p></section>
+        <section className="portal-note"><span className="portal-note-icon"><CurriculumPixelIcon systemId="geometry" width={24} height={24}/></span><p><b>体系审核状态</b><br/>{approvedSystemCount} 个知识体系均已通过审核；其中函数体系的 {formalNodeCount} 个节点已正式接入，其他专题的 {candidateNodeCount} 个节点保留候选标识并可在独立页面学习。</p></section>
         <footer className="portal-footer"><span>MINETOAST · HIGH SCHOOL MATHEMATICS</span><span>图谱数据按正式发布版本统计</span></footer>
       </section>
     </div>

@@ -1,5 +1,7 @@
 # Renderer Family v1
 
+第二批通过共享 SVG 原语实现参数曲线、填充多边形、可换行标签、离散点列和圆集合区域 mask。三视图使用同一长方体的斜投影示意及三个尺寸矩形，属于二维分区演示，不提供自由相机。集合和统计场景复用二维渲染器，没有新增独立 renderer family。说明区可放到舞台下方，避免窄屏文字覆盖几何对象。
+
 统一接口 `RendererProps` 输入 AnimationFrame、reduced-motion 标志、MathModel、合法 parameters、当前 step、可交互标志、参数更新与交互事件、辅助线状态和相机恢复序号。渲染器只解释数学对象，不检查 nodeId 或 demoId。
 
 | Renderer | 实际实现 | 范围 |

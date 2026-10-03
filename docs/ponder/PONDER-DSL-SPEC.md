@@ -1,5 +1,11 @@
 # Ponder DSL v1
 
+第二批扩展：二维新增 `parametric(x,y,domain,end?)`、`polygon(vertices,opacity)`、`label(at)`、`samples(points,count?,connect)`、`region(operation,first,second?,bounds,opacity)`。region 引用 circle 对象，支持 union、intersection、相对 bounds 宇宙区域的 complement。samples 最多 512 点，polygon 为 3–32 个顶点。参数曲线采用固定 241 点采样。位置与动态计数通过安全表达式求值。
+
+`scene.captionPlacement` 可选 overlay（默认）或 below（舞台下方独立说明区）。这是通用布局配置，没有节点特定渲染分支。
+
+表达式新增 `floor(x)` 和 `frequency(n,p,seed)`。frequency 要求 n∈[1,1000]、p∈[0,1]、整数 seed∈[1,10]，按 floor(n) 返回可回放伪随机伯努利前缀频率。每个 p/seed 缓存 1000 次累计结果，最多 32 项；初次 O(1000)，查询 O(1)，空间有界。模拟不构成随机独立性或大数定律的证明。
+
 权威运行时 Schema：`packages/ponder/src/schema.ts`。机器可读版本：`ponder-scene.schema.json`。场景是 JSON 数据，TS fixture 仅包装严格解析；不是代码执行格式。
 
 顶层：id、version、dslVersion、nodeId、title、renderer、pedagogy、duration、scene、parameters、expressions、objects、readouts、constraints、steps、controls、completion、textbook。未知字段拒绝。版本目前仅为 1；duration 30–180 秒；3–8 步。

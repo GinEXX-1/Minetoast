@@ -94,10 +94,15 @@ export function useSmoothGraphWheel(ref:RefObject<HTMLElement|null>){
  const flow=useReactFlow();
  useEffect(()=>{
   const element=ref.current;if(!element)return;
-  let frame=0,last=0,target=flow.getViewport();
+  let frame=0,last=0,target=flow.getViewport(),previous=target,stalledFrames=0;
   const cancel=()=>{cancelAnimationFrame(frame);frame=0;};
   const step=(now:number)=>{
    const current=flow.getViewport(),factor=1-Math.exp(-Math.min(32,now-last||16)/55);last=now;
+   const unmoved=Math.abs(current.x-previous.x)<.05&&Math.abs(current.y-previous.y)<.05&&Math.abs(current.zoom-previous.zoom)<.00005;
+   const distant=Math.abs(current.x-target.x)>1||Math.abs(current.y-target.y)>1||Math.abs(current.zoom-target.zoom)>.001;
+   stalledFrames=unmoved&&distant?stalledFrames+1:0;
+   previous=current;
+   if(stalledFrames>=5){cancel();return;}
    const next={x:current.x+(target.x-current.x)*factor,y:current.y+(target.y-current.y)*factor,zoom:current.zoom+(target.zoom-current.zoom)*factor};
    const settled=Math.abs(next.zoom-target.zoom)<.0002&&Math.abs(next.x-target.x)<.2&&Math.abs(next.y-target.y)<.2;
    void flow.setViewport(settled?target:next,{duration:0});
@@ -112,7 +117,7 @@ export function useSmoothGraphWheel(ref:RefObject<HTMLElement|null>){
    const zoom=Math.max(.04,Math.min(1.8,target.zoom*Math.exp(-Math.max(-180,Math.min(180,delta))*.002)));
    const ratio=zoom/target.zoom;target={x:x-(x-target.x)*ratio,y:y-(y-target.y)*ratio,zoom};
    if(!motionTime(1)){void flow.setViewport(target,{duration:0});return;}
-   if(!frame){last=performance.now();frame=requestAnimationFrame(step);}
+   if(!frame){last=performance.now();previous=flow.getViewport();stalledFrames=0;frame=requestAnimationFrame(step);}
   };
   element.addEventListener('wheel',wheel,{capture:true,passive:false});element.addEventListener('pointerdown',cancel);
   return()=>{cancel();element.removeEventListener('wheel',wheel,true);element.removeEventListener('pointerdown',cancel);};
@@ -129,7 +134,6 @@ export function MotionControls({position='top-left'}:{position?:'top-left'|'bott
  return <Controls position={position} showZoom={false} showFitView={false} showInteractive={false}>
   <ControlButton aria-label="Zoom In" onClick={()=>zoom(1)}><svg viewBox="0 0 16 16"><path d="M7 2h2v5h5v2H9v5H7V9H2V7h5z"/></svg></ControlButton>
   <ControlButton aria-label="Zoom Out" onClick={()=>zoom(-1)}><svg viewBox="0 0 16 16"><path d="M2 7h12v2H2z"/></svg></ControlButton>
-  <ControlButton aria-label="Fit View" onClick={()=>void flow.fitView({padding:.18,duration:motionTime(480),ease:smoothEase,interpolate:'smooth'})}><svg viewBox="0 0 16 16"><path d="M2 6V2h4v2H4v2zm8-4h4v4h-2V4h-2zM2 10h2v2h2v2H2zm10 0h2v4h-4v-2h2z"/></svg></ControlButton>
  </Controls>;
 }
 

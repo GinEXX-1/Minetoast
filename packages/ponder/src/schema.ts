@@ -4,6 +4,11 @@ const expr=z.string().min(1).max(256);
 const vec2=z.tuple([expr,expr]),vec3=z.tuple([expr,expr,expr]);
 const common={id:name,label:z.string().max(120),color:z.enum(['cyan','gold','green','muted']).default('cyan')};
 export const objectSchema=z.discriminatedUnion('kind',[
+ z.object({...common,kind:z.literal('parametric'),x:expr,y:expr,domain:z.tuple([z.number(),z.number()]),end:expr.optional()}).strict(),
+ z.object({...common,kind:z.literal('polygon'),vertices:z.array(vec2).min(3).max(32),opacity:z.number().min(0).max(.6).default(.22)}).strict(),
+ z.object({...common,kind:z.literal('label'),at:vec2}).strict(),
+ z.object({...common,kind:z.literal('samples'),points:z.array(vec2).min(1).max(512),count:expr.optional(),connect:z.boolean().default(false)}).strict(),
+ z.object({...common,kind:z.literal('region'),operation:z.enum(['union','intersection','complement']),first:name,second:name.optional(),bounds:z.tuple([vec2,vec2]),opacity:z.number().min(.1).max(.6).default(.32)}).strict(),
  z.object({...common,kind:z.literal('plot'),expression:expr,domain:z.tuple([z.number(),z.number()]),end:expr.optional()}).strict(),
  z.object({...common,kind:z.literal('point'),at:vec2,draggable:name.optional()}).strict(),
  z.object({...common,kind:z.literal('segment'),from:vec2,to:vec2,dashed:z.boolean().default(false),arrow:z.boolean().default(false)}).strict(),
@@ -25,7 +30,7 @@ export const sceneSchema=z.object({
  renderer:z.enum(['coordinate','geometry','solid']),
  pedagogy:z.object({primary:z.enum(patterns),secondary:z.array(z.enum(patterns)).max(3).default([])}).strict(),
  duration:z.number().min(30).max(180),
- scene:z.object({axes:z.boolean().default(false),xRange:z.tuple([z.number().finite(),z.number().finite()]),yRange:z.tuple([z.number().finite(),z.number().finite()]),camera:z.tuple([z.number().finite(),z.number().finite(),z.number().finite()]).default([5,4,6])}).strict().refine(s=>s.xRange[0]<s.xRange[1]&&s.yRange[0]<s.yRange[1]),
+ scene:z.object({captionPlacement:z.enum(['overlay','below']).default('overlay'),axes:z.boolean().default(false),xRange:z.tuple([z.number().finite(),z.number().finite()]),yRange:z.tuple([z.number().finite(),z.number().finite()]),camera:z.tuple([z.number().finite(),z.number().finite(),z.number().finite()]).default([5,4,6])}).strict().refine(s=>s.xRange[0]<s.xRange[1]&&s.yRange[0]<s.yRange[1]),
  parameters:z.record(name,parameter),expressions:z.record(name,expr),objects:z.array(objectSchema).min(1).max(64),
  readouts:z.array(z.object({id:name,label:z.string().min(1).max(80),expression:expr,range:z.tuple([z.number().finite(),z.number().finite()]).refine(r=>r[0]<r[1]).optional()}).strict()).max(16).default([]),
  constraints:z.array(z.object({kind:z.literal('ordered'),lower:name,upper:name,gap:z.number().positive().finite()}).strict()).max(8).default([]),
@@ -44,12 +49,12 @@ export const sceneSchema=z.object({
  const total=s.steps.reduce((sum,step)=>sum+step.duration,0);if(total<30||total>180||Math.abs(total-s.duration)>0.01)issue('Duration must equal step estimates within 30-180 seconds');
  if(ids.size!==s.objects.length||new Set(s.steps.map(x=>x.id)).size!==s.steps.length)issue('Duplicate IDs');
  if(Object.keys(s.parameters).length>16||Object.keys(s.expressions).length>16)issue('Expression/parameter budget exceeded');
- if(Object.keys(s.expressions).some(key=>parameters.has(key)||['x','pi','sin','cos','tan','sqrt','abs','exp','log','min','max'].includes(key))||Object.keys(s.parameters).some(key=>['x','pi','sin','cos','tan','sqrt','abs','exp','log','min','max'].includes(key)))issue('Expression namespace collision');
+ if(Object.keys(s.expressions).some(key=>parameters.has(key)||['x','pi','sin','cos','tan','sqrt','abs','exp','log','min','max','floor','frequency'].includes(key))||Object.keys(s.parameters).some(key=>['x','pi','sin','cos','tan','sqrt','abs','exp','log','min','max','floor','frequency'].includes(key)))issue('Expression namespace collision');
  const constrained=new Set<string>();for(const c of s.constraints){if(constrained.has(c.lower)||constrained.has(c.upper))issue('V1 constraints must use disjoint pairs');constrained.add(c.lower);constrained.add(c.upper);}
  for(const c of s.constraints){if(!parameters.has(c.lower)||!parameters.has(c.upper)||c.lower===c.upper)issue('Constraint reference invalid');else if(s.parameters[c.lower].default+c.gap>s.parameters[c.upper].default||s.parameters[c.lower].min+c.gap>s.parameters[c.upper].max)issue('Unsatisfiable default constraint');}
  if(new Set(s.readouts.map(r=>r.id)).size!==s.readouts.length)issue('Duplicate readout IDs');
  for(const step of s.steps){for(const cue of step.cues)if(!step.show.includes(cue.target)||cue.start+cue.duration>step.duration)issue('Invalid cue target or timing');if(step.narration.captionAt>=step.duration||step.narration.formulaAt>=step.duration)issue('Narration outside step');for(const id of step.readouts)if(!s.readouts.some(r=>r.id===id))issue('Unknown readout');for(const id of [...step.show,...step.highlight])if(!ids.has(id))issue(`Unknown object ${id}`);for(const p of step.interaction)if(!parameters.has(p))issue(`Unknown interaction ${p}`);for(const a of step.animate){const p=s.parameters[a.parameter];if(a.start>=step.duration||a.start+(a.duration??step.duration-a.start)>step.duration)issue('Animation outside step');if(!p||Math.min(a.from,a.to)<p.min||Math.max(a.from,a.to)>p.max)issue('Invalid animation bounds');}}
- for(const o of s.objects){if(o.kind==='intersections'){if(!s.objects.some(x=>x.id===o.circle&&x.kind==='circle')||!s.objects.some(x=>x.id===o.line&&x.kind==='line'))issue('Intersection references invalid');}if(s.renderer==='solid'&&!['plane','point3','line3','segment3','arc3','angleMarker3'].includes(o.kind)||s.renderer!=='solid'&&['plane','point3','line3','segment3','arc3','angleMarker3'].includes(o.kind))issue('Object unsupported by renderer');if(o.kind==='plot'&&o.domain[0]>=o.domain[1])issue('Invalid plot domain');if(o.kind==='point'&&o.draggable&&!parameters.has(o.draggable))issue('Invalid draggable parameter');}
+ for(const o of s.objects){if(o.kind==='region'){if(!s.objects.some(x=>x.id===o.first&&x.kind==='circle')||(o.operation!=='complement'&&!s.objects.some(x=>x.id===o.second&&x.kind==='circle')))issue('Region requires circle references');}if(o.kind==='intersections'){if(!s.objects.some(x=>x.id===o.circle&&x.kind==='circle')||!s.objects.some(x=>x.id===o.line&&x.kind==='line'))issue('Intersection references invalid');}if(s.renderer==='solid'&&!['plane','point3','line3','segment3','arc3','angleMarker3'].includes(o.kind)||s.renderer!=='solid'&&['plane','point3','line3','segment3','arc3','angleMarker3'].includes(o.kind))issue('Object unsupported by renderer');if((o.kind==='plot'||o.kind==='parametric')&&o.domain[0]>=o.domain[1])issue('Invalid plot domain');if(o.kind==='point'&&o.draggable&&!parameters.has(o.draggable))issue('Invalid draggable parameter');}
 });
 export type SceneDefinition=z.infer<typeof sceneSchema>;
 export type SceneObject=z.infer<typeof objectSchema>;
