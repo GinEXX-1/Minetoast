@@ -21,7 +21,8 @@ test('P3E key achievement has distinct message; reduced motion suppresses animat
  await page.goto('/function-world');
  const frame=page.locator(`[data-testid="world-node-${nodeId}"] .kw-frame`);
  await expect(frame).toHaveAttribute('data-state','available');
- await frame.click();
+ await frame.press('Enter');
+ await expect(frame).toHaveAttribute('data-state','unlocked');
  const toast=page.locator('.world-toasts>div.key');
  await expect(toast).toContainText('关键成就达成');
  await expect(toast).toContainText('函数的概念');
