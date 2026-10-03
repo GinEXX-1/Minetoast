@@ -11,7 +11,7 @@ test('a large mounted curriculum graph supports search fly-to and Strong-path hi
  await page.getByRole('button',{name:'Zoom In'}).click();
  await expect.poll(()=>viewport.getAttribute('style')).not.toBe(transformBeforeZoom);
  await expect.poll(()=>miniMapWindow.getAttribute('d')).not.toBe(mapBeforeZoom);
- await page.getByRole('region',{name:'图谱操作'}).getByRole('button',{name:'Fit View'}).click();
+ await page.getByRole('region',{name:'图谱操作'}).getByRole('button',{name:'全局'}).click();
 
  const search=page.getByRole('textbox',{name:'搜索导数知识'});
  await search.fill('用导数综合研究函数');

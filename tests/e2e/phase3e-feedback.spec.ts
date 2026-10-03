@@ -6,7 +6,7 @@ test('P3E ordinary unlock has one item toast',async({page})=>{
  await page.addInitScript(({key,version})=>localStorage.setItem(key,JSON.stringify({schemaVersion:1,graphVersion:version,initialized:true,unlockedNodeIds:[]})),{key:worldProgressStorageKey,version:worldGraphVersion});
  await page.goto('/function-world');
  await page.locator('[data-testid="world-node-HS-SET-CONCEPT-001"] .kw-frame').click();
- await expect(page.getByLabel('函数知识世界进度 1 / 32')).toBeVisible();
+ await expect(page.locator('#world-progress-panel .world-sidebar-total').filter({hasText:'1 / 32'})).toBeVisible();
  const toast=page.locator('.world-toasts>div').filter({hasText:'集合的概念'});
  await expect(toast).toContainText('知识解锁');
  await expect(toast.locator('svg')).toHaveCount(1);
@@ -32,7 +32,7 @@ test('P3E key achievement has distinct message; reduced motion suppresses animat
 test('batch initialization shows one summary toast, one particle burst and bounded ancestor animation',async({page})=>{
  await page.goto('/function-world');
  await page.locator('[data-testid="world-node-HS-FUNC-BISECTION-001"] .kw-frame').click();
- await expect(page.getByLabel('函数知识世界进度 9 / 32')).toBeVisible();
+ await expect(page.locator('#world-progress-panel .world-sidebar-total').filter({hasText:'9 / 32'})).toBeVisible();
  await expect(page.locator('.world-toasts>div')).toHaveCount(1);
  await expect(page.locator('.world-toasts>div')).toContainText('已自动点亮 9 个知识节点');
  await expect(page.locator('.world-card.ancestor-pulse')).toHaveCount(8);

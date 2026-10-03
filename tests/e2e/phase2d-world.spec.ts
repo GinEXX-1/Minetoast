@@ -6,7 +6,7 @@ test.describe('Phase 2D Minetoast Function World',()=>{
  test('keeps the legacy entry and renders the frozen graph with search and details',async({page})=>{
   await expect(page.locator('.world-card')).toHaveCount(32);
   await expect(page.locator('.world-card.key')).toHaveCount(5);
-  await expect(page.getByLabel('函数知识世界进度 0 / 32')).toBeVisible();
+  await expect(page.locator('#world-progress-panel .world-sidebar-total').filter({hasText:'0 / 32'})).toBeVisible();
   await page.getByRole('textbox',{name:'搜索知识'}).fill('monotonicity');
   await page.getByRole('option',{name:/函数的单调性/}).first().click();
   await expect(page.locator('[data-testid="world-node-HS-FUNC-MONO-001"]')).toHaveClass(/focused/);
@@ -41,12 +41,12 @@ test.describe('Phase 2D Minetoast Function World',()=>{
   await expect(root).toHaveAttribute('data-status','available');
   await root.click();
   await expect(root).toHaveAttribute('data-status','unlocked');
-  await expect(page.getByLabel('函数知识世界进度 1 / 32')).toBeVisible();
+  await expect(page.locator('#world-progress-panel .world-sidebar-total').filter({hasText:'1 / 32'})).toBeVisible();
   await page.getByRole('button',{name:'关闭详情'}).click();
   await expect(page.locator('.react-flow__edge')).toHaveCount(40);
   await page.getByRole('checkbox',{name:'显示完整知识关系'}).check();
   await expect(page.locator('.react-flow__edge')).toHaveCount(51);
-  await expect(page.getByLabel('函数知识世界进度 1 / 32')).toBeVisible();
+  await expect(page.locator('#world-progress-panel .world-sidebar-total').filter({hasText:'1 / 32'})).toBeVisible();
   await page.getByRole('combobox',{name:'路径起点'}).selectOption('HS-FUNC-LINEAR-001');
   await page.getByRole('combobox',{name:'路径终点'}).selectOption('HS-FUNC-APPLY-001');
   await page.getByRole('button',{name:'显示路径'}).click();
