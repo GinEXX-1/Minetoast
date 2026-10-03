@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import {MinetoastBrand} from './MinetoastBrand';
-import CurriculumSystemWorld from './CurriculumSystemWorld';
 import {trigonometrySeed} from '../../../content/fixtures/trigonometry-system';
 import {sequencesSeed} from '../../../content/fixtures/sequences-system';
 import {setsLogicSeed} from '../../../content/fixtures/sets-logic-system';
@@ -15,6 +14,8 @@ import {CurriculumPixelIcon} from './CurriculumPixelIcon';
 import {openSettings} from './settings/preferences';
 import './knowledge-portal.css';
 import './portal-mobile.css';
+
+const CurriculumSystemWorld = lazy(() => import('./CurriculumSystemWorld'));
 
 type System = {
   id: string;
@@ -137,14 +138,16 @@ export function KnowledgePortal() {
 export function KnowledgeSystemPage({ systemId }: { systemId: string }) {
   const system = systems.find(item => item.id === systemId);
   if (!system) return <main className="system-empty"><p>未找到该知识体系。</p><a href="/">返回知识总览</a></main>;
-  if (systemId === 'trigonometry') return <CurriculumSystemWorld seed={trigonometrySeed}/>;
-  if (systemId === 'sequences') return <CurriculumSystemWorld seed={sequencesSeed}/>;
-  if (systemId === 'sets-logic') return <CurriculumSystemWorld seed={setsLogicSeed}/>;
-  if (systemId === 'algebra') return <CurriculumSystemWorld seed={algebraSeed}/>;
-  if (systemId === 'vectors') return <CurriculumSystemWorld seed={vectorsSeed}/>;
-  if (systemId === 'geometry') return <CurriculumSystemWorld seed={geometrySeed}/>;
-  if (systemId === 'probability') return <CurriculumSystemWorld seed={probabilitySeed}/>;
-  if (systemId === 'calculus') return <CurriculumSystemWorld seed={calculusSeed}/>;
+  const seed = systemId === 'trigonometry' ? trigonometrySeed
+    : systemId === 'sequences' ? sequencesSeed
+    : systemId === 'sets-logic' ? setsLogicSeed
+    : systemId === 'algebra' ? algebraSeed
+    : systemId === 'vectors' ? vectorsSeed
+    : systemId === 'geometry' ? geometrySeed
+    : systemId === 'probability' ? probabilitySeed
+    : systemId === 'calculus' ? calculusSeed
+    : null;
+  if (seed) return <Suspense fallback={<div className="loading">加载知识世界…</div>}><CurriculumSystemWorld seed={seed}/></Suspense>;
   return <main className="system-page" style={{ '--system-bg': `url('/backgrounds/knowledge-${system.image}.webp')` } as CSSProperties}>
     <header><a href="/">← 返回知识总览</a><span>KNOWLEDGE WORLD / {system.english}</span></header>
     <section className="system-page-panel"><span className="portal-kicker">HIGH SCHOOL MATHEMATICS</span><h1>{system.name}</h1><p>{system.description}</p><div className="system-status"><i className="dot"/>该体系尚未接入正式知识图谱</div><p className="system-explanation">此页面已建立独立入口。正式节点、前置关系和学习进度将在完成内容审核并发布后显示。</p><a className="portal-account" href="/">返回知识体系目录 <b>↗</b></a></section>
