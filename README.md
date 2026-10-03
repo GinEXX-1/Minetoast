@@ -1,4 +1,4 @@
-# Minetoast
+<img width="1275" height="221" alt="screenshot" src="https://github.com/user-attachments/assets/8108b4dc-d399-4713-8c98-cb8d43643860" />
 
 Minetoast 是一个以知识关系为核心的高中数学交互式学习地图。它把知识点、强前置关系、弱关联、教材证据和学习进度放在同一张可探索的图谱中，让学习者从“我现在在哪里”继续到“下一步学什么”。
 
